@@ -13,3 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import submarine.pipeline
+
+if __name__ == "__main__":
+    data = submarine.pipeline.split_csv(
+            "data/taxi_data/data.csv", [0.5, 0.2, 0.3])
+
+
+

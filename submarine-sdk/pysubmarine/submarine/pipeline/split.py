@@ -13,3 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pandas as pd
+from submarine.exceptions import PreprocessingException
+
+
+def split_csv(input_path, partition, header=0):
+    df = pd.read_csv(input_path, header=header)
+    if len(partition) != 3:
+        raise PreprocessingException("Partition size should equal 3")
+    if (partition[0] + partition[1] + partition[2]) != 1:
+        raise PreprocessingException("Partition sum should equal 1")
+
+    data_len = df.size
+    train_len = int(data_len*partition[0])
+    valid_len = int(data_len*partition[1])
+
+    data = {'train': df.iloc[:train_len, ],
+            'valid': df.iloc[train_len:(train_len + valid_len), ],
+            'test': df.iloc[(train_len + valid_len):, ]}
+
+    return data
