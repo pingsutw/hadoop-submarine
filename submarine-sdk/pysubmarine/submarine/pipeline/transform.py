@@ -17,19 +17,13 @@ import pandas as pd
 from submarine.exceptions import PreprocessingException
 
 
-def split_df(dataframe, partition):
-    # df = pd.read_csv(input_path, header=header)
-    if len(partition) != 3:
-        raise PreprocessingException("Partition size should equal 3")
-    if (partition[0] + partition[1] + partition[2]) != 1:
-        raise PreprocessingException("Partition sum should equal 1")
+def handle_missing_values(data_all, features, missing_strategy=None):
+    if features is None:
+        raise PreprocessingException("features must have a value")
+    for feature in features:
+        if data_all[feature].dtype == 'object':
+            data_all[feature].fillna(value='', inplace=True)
+        else:
+            data_all[feature].fillna(value=0, inplace=True)
 
-    data_len = dataframe.size
-    train_len = int(data_len*partition[0])
-    valid_len = int(data_len*partition[1])
-
-    data = {'train': dataframe.iloc[:train_len, ],
-            'valid': dataframe.iloc[train_len:(train_len + valid_len), ],
-            'test': dataframe.iloc[(train_len + valid_len):, ]}
-
-    return data
+    return data_all

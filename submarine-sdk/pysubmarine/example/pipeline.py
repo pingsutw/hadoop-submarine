@@ -13,11 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import submarine.pipeline
+import submarine.pipeline.split
+import submarine.pipeline.transform
+import pandas as pd
 
 if __name__ == "__main__":
-    data = submarine.pipeline.split_csv(
-            "data/taxi_data/data.csv", [0.5, 0.2, 0.3])
+    data = pd.read_csv("data/taxi_data/data.csv")
+    data_transformed = submarine.pipeline.transform.handle_missing_values(data, data.columns)
+    data = submarine.pipeline.split.split_df(data_transformed, [0.5, 0.2, 0.3])
+
+    print(data['valid'].isnull().sum()[data['valid'].isnull().sum() > 0])
+    # print(data['fare'].dtype)
+    # data = submarine.pipeline.split.split_df(df, [0.5, 0.2, 0.3])
 
 
+    #print(data['train'].dtypes)
 
