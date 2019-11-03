@@ -13,8 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pandas as pd
+import logging
 from submarine.exceptions import PreprocessingException
+logger = logging.getLogger(__name__)
 
 
 def split_df(dataframe, partition):
@@ -24,12 +25,12 @@ def split_df(dataframe, partition):
     if (partition[0] + partition[1] + partition[2]) != 1:
         raise PreprocessingException("Partition sum should equal 1")
 
-    data_len = dataframe.size
+    data_len = dataframe.shape[0]
     train_len = int(data_len*partition[0])
     valid_len = int(data_len*partition[1])
 
     data = {'train': dataframe.iloc[:train_len, ],
             'valid': dataframe.iloc[train_len:(train_len + valid_len), ],
-            'test': dataframe.iloc[(train_len + valid_len):, ]}
+            'test': dataframe.iloc[(train_len + valid_len):-1, ]}
 
     return data

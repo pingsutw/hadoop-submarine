@@ -16,16 +16,50 @@
 import submarine.pipeline.split
 import submarine.pipeline.transform
 import pandas as pd
+import tensorflow as tf
+import xgboost as xgb
+import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+from sklearn.externals import joblib
+
+
+pd.set_option('display.max_columns', None)
 
 if __name__ == "__main__":
+
     data = pd.read_csv("data/taxi_data/data.csv")
     data_transformed = submarine.pipeline.transform.handle_missing_values(data, data.columns)
+    data_transformed['tips'] = np.where(data_transformed['fare'] * 0.2 < data_transformed['tips'], 1, 0)
+    print("Number of company types :", len(data_transformed['company'].unique()))
+    print("Number of payment types: ", len(data_transformed['payment_type'].unique()))
+    data_transformed = submarine.pipeline.transform\
+        .labelEncoder(data_transformed, ['company', 'payment_type'])
+    # print(data_transformed['tips'].head())
+    # print(data_transformed.head())
+    # print(data_transformed.describe())
     data = submarine.pipeline.split.split_df(data_transformed, [0.5, 0.2, 0.3])
+    x_train = data['train'].drop('tips', axis=1)
+    y_train = data['train']['tips']
 
-    print(data['valid'].isnull().sum()[data['valid'].isnull().sum() > 0])
-    # print(data['fare'].dtype)
-    # data = submarine.pipeline.split.split_df(df, [0.5, 0.2, 0.3])
+    # Training
+    xg_cls = xgb.XGBClassifier(n_estimators=200, max_depth=50)
+    xg_cls.fit(x_train, y_train)
 
+    # Pusher
+    model_file_name = 'model.pkl'
+    model_columns_file_name = 'model_columns.pkl'
+    model_columns = list(x_train.columns)
+    joblib.dump(model_columns, model_columns_file_name)
+    joblib.dump(xg_cls, model_file_name)
 
-    #print(data['train'].dtypes)
+    # Evaluate
+    x_test = data['test'].drop('tips', axis=1)
+    y_test = data['test']['tips']
+    # print(x_test.iloc[0, ].to_json())
+
+    y_pred = xg_cls.predict(x_test)
+    score = accuracy_score(y_test, y_pred)
+    print("score :", score)
+    print("class name :", type(xg_cls))
 

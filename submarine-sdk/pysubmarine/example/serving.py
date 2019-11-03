@@ -12,3 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+import submarine.pipeline.serving
+
+model_file_name = 'model.pkl'
+model_columns_file_name = 'model_columns.pkl'
+
+if __name__ == "__main__":
+    submarine.pipeline.serving.pickle(model_file_name, model_columns_file_name)

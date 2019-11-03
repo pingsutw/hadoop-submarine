@@ -13,17 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pandas as pd
+import logging
 from submarine.exceptions import PreprocessingException
+from sklearn import preprocessing
+
+logger = logging.getLogger(__name__)
 
 
-def handle_missing_values(data_all, features, missing_strategy=None):
+def handle_missing_values(data_all, features, missing_strategy='FILL_WITH_CONST'):
     if features is None:
         raise PreprocessingException("features must have a value")
     for feature in features:
-        if data_all[feature].dtype == 'object':
-            data_all[feature].fillna(value='', inplace=True)
-        else:
+        if missing_strategy == 'FILL_WITH_CONST':
             data_all[feature].fillna(value=0, inplace=True)
 
+    return data_all
+
+
+def labelEncoder(data_all, features):
+    le = preprocessing.LabelEncoder()
+    for feature in features:
+        le.fit(data_all[feature])
+        data_all[feature] = le.transform(data_all[feature])
     return data_all

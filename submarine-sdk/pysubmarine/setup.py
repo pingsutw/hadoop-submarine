@@ -29,6 +29,8 @@ setup(
         'sqlalchemy',
         'sqlparse',
         'pymysql',
+        'waitress',
+        'flask'
     ],
     classifiers=[
         'Intended Audience :: Developers',
