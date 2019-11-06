@@ -13,24 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
-from submarine.exceptions import PreprocessingException
-logger = logging.getLogger(__name__)
+from sklearn.metrics import accuracy_score
 
 
-def split_df(dataframe, partition):
-    # df = pd.read_csv(input_path, header=header)
-    if len(partition) != 3:
-        raise PreprocessingException("Partition size should equal 3")
-    if (partition[0] + partition[1] + partition[2]) != 1:
-        raise PreprocessingException("Partition sum should equal 1")
+def accuracy(model, data, label_features):
+    x_valid = data.valid_set.drop(label_features, axis=1)
+    y_valid = data.valid_set[label_features]
 
-    data_len = dataframe.shape[0]
-    train_len = int(data_len*partition[0])
-    valid_len = int(data_len*partition[1])
-
-    train = dataframe.iloc[:train_len, ]
-    valid = dataframe.iloc[train_len:(train_len + valid_len), ]
-    test = dataframe.iloc[(train_len + valid_len):-1, ]
-
-    return train, valid, test
+    y_pred = model.predict(x_valid)
+    score = accuracy_score(y_valid, y_pred)
+    return score

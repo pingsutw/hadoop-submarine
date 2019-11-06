@@ -13,24 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
-from submarine.exceptions import PreprocessingException
-logger = logging.getLogger(__name__)
+# Data extension
+CSV = '.csv'
 
+# Data type
+PANDAS = 'pandas'
+TENSORFLOW = 'tensorflow'
+OBJECT = 'object'
 
-def split_df(dataframe, partition):
-    # df = pd.read_csv(input_path, header=header)
-    if len(partition) != 3:
-        raise PreprocessingException("Partition size should equal 3")
-    if (partition[0] + partition[1] + partition[2]) != 1:
-        raise PreprocessingException("Partition sum should equal 1")
+# Engine
+LOCAL = 'LOCAL'
 
-    data_len = dataframe.shape[0]
-    train_len = int(data_len*partition[0])
-    valid_len = int(data_len*partition[1])
+# preprocessing strategy
+FILL_WITH_CONST = 'FILL_WITH_CONST'
 
-    train = dataframe.iloc[:train_len, ]
-    valid = dataframe.iloc[train_len:(train_len + valid_len), ]
-    test = dataframe.iloc[(train_len + valid_len):-1, ]
+# Models
+XGBOOST = 'XGBOOST'
 
-    return train, valid, test

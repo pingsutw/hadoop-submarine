@@ -14,23 +14,16 @@
 # limitations under the License.
 
 import logging
-from submarine.exceptions import PreprocessingException
+import os
+from sklearn.externals import joblib
+
 logger = logging.getLogger(__name__)
 
 
-def split_df(dataframe, partition):
-    # df = pd.read_csv(input_path, header=header)
-    if len(partition) != 3:
-        raise PreprocessingException("Partition size should equal 3")
-    if (partition[0] + partition[1] + partition[2]) != 1:
-        raise PreprocessingException("Partition sum should equal 1")
-
-    data_len = dataframe.shape[0]
-    train_len = int(data_len*partition[0])
-    valid_len = int(data_len*partition[1])
-
-    train = dataframe.iloc[:train_len, ]
-    valid = dataframe.iloc[train_len:(train_len + valid_len), ]
-    test = dataframe.iloc[(train_len + valid_len):-1, ]
-
-    return train, valid, test
+def push2local(destination, model, model_columns=None):
+    model_file_path = os.path.join(destination, 'model.pkl')
+    joblib.dump(model, model_file_path)
+    if model_columns is not None:
+        model_columns_file_path = os.path.join(destination, 'model_columns.pkl')
+        model_columns = list(model_columns)
+        joblib.dump(model_columns, model_columns_file_path)

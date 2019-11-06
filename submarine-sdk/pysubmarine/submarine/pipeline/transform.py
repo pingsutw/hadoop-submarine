@@ -16,23 +16,53 @@
 import logging
 from submarine.exceptions import PreprocessingException
 from sklearn import preprocessing
+import numpy as np
+import pandas as pd
+from submarine.constants import FILL_WITH_CONST
 
 logger = logging.getLogger(__name__)
 
 
-def handle_missing_values(data_all, features, missing_strategy='FILL_WITH_CONST'):
-    if features is None:
-        raise PreprocessingException("features must have a value")
-    for feature in features:
-        if missing_strategy == 'FILL_WITH_CONST':
+def df_handle_missing_values(data_all, feature, strategy=FILL_WITH_CONST):
+    if feature is None:
+        raise PreprocessingException("features must need a value")
+
+    if strategy == FILL_WITH_CONST:
+        if data_all[feature].dtype == 'object':
+            data_all[feature].fillna(value='', inplace=True)
+        else:
             data_all[feature].fillna(value=0, inplace=True)
 
     return data_all
 
 
-def labelEncoder(data_all, features):
-    le = preprocessing.LabelEncoder()
-    for feature in features:
-        le.fit(data_all[feature])
-        data_all[feature] = le.transform(data_all[feature])
+def df_label_encoder(data_all, feature):
+    labelencoder = preprocessing.LabelEncoder()
+    labelencoder.fit(data_all[feature])
+    data_all[feature] = labelencoder.transform(data_all[feature])
     return data_all
+
+
+def df_where(data_all, condition, x, y):
+    return data_all.where(condition, x, y)
+
+
+def df_greater(x, y):
+    return x.gt(y)
+
+
+def df_multiply(x, y):
+    return x.multiply(y)
+
+
+def df_concatenate(train_df, valid_df, test_df):
+    train_size = len(train_df)
+    valid_size = len(valid_df) if valid_df is not None else 0
+    test_size = len(test_df) if test_df is not None else 0
+    concatenated_df = pd.concat([train_df, valid_df, test_df], ignore_index=True)
+    split = np.array(
+        [0] * train_size + [1] * valid_size + [2] * test_size,
+        dtype=np.int8
+    )
+    concatenated_df = concatenated_df.assign(split=pd.Series(split).values)
+    return concatenated_df
