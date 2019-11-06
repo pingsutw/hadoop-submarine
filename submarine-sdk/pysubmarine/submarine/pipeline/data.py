@@ -21,10 +21,10 @@ from submarine.pipeline.transform import df_label_encoder, df_handle_missing_val
 
 
 class Data:
-    def __init__(self, source_url, data_type, engine):
+    def __init__(self, source_url, data_type, runtime):
         self.source_url = source_url
         self.data_type = data_type
-        self.engine = engine
+        self.runtime = runtime
         self.training_set = None
         self.valid_set = None
         self.test_set = None

@@ -13,13 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from submarine.constants import XGBOOST
+from submarine.pipeline.DNN_model import DNN_Keras
 from xgboost import XGBClassifier
+
+from submarine.constants import XGBOOST, DNN
 
 classifier_model_registry = {
     XGBOOST: XGBClassifier(n_estimators=100)
 }
 
 tensorflow_model_registry = {
-
+    DNN: DNN_Keras
 }

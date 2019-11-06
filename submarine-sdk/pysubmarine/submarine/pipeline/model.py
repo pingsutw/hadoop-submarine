@@ -13,39 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from submarine.pipeline.model_registry import classifier_model_registry
+import tensorflow as tf
 from submarine.pipeline.utils import get_from_registry
-from submarine.pipeline.evaluate import accuracy
-from submarine.pipeline.pusher import push2local
-import submarine.pipeline.serving
-
 from submarine.constants import LOCAL
 
 
 class Model:
-    def __init__(self, model, engine, data, registry, distributed=False):
-        self.model = get_from_registry(model, registry)
+    def __init__(self, model, runtime, data, registry, feature, label_feature, distributed=False, **kwargs):
+        self.model = get_from_registry(model, registry)(**kwargs)
         self.distributed = distributed
-        self.engine = engine
+        self.runtime = runtime
         self.registry = registry
         self.data = data
-        self.input = None
-        self.output = None
+        self.feature = feature
+        self.label_feature = label_feature
 
-    def train(self, feature, label_feature):
-        self.input = feature
-        self.output = label_feature
-        self.model.fit(self.data.valid_set[feature], self.data.valid_set[label_feature])
+    def train(self):
+        self.model.fit(self.data.training_set[self.feature], self.data.training_set[self.label_feature])
 
     def predict(self):
-        pass
+        return self.model.predict(self.feature)
 
-    def evaluate(self, label_features):
-        return accuracy(self.model, self.data, label_features)
-
-    def push(self, destination, storage=LOCAL):
-        if storage == LOCAL:
-            push2local(destination, self.model, self.input)
-
-    def serve(self, model, model_columns):
-        submarine.pipeline.serving.pickle(model, model_columns)
+    def evaluate(self):
+        # dataset = tf.data.Dataset.from_tensor_slices((self.data[self.feature].values, target.values))
+        return self.model.evaluate(self.data.valid_set[self.feature], self.data.valid_set[self.label_feature])

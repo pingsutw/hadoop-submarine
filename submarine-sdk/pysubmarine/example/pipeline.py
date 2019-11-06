@@ -15,11 +15,12 @@
 
 from submarine.pipeline.data import Data
 from submarine.pipeline.model import Model
-from submarine.pipeline.model_registry import classifier_model_registry
+from submarine.pipeline.model_registry import classifier_model_registry,\
+    tensorflow_model_registry
 
 import tensorflow as tf
 import pandas as pd
-from submarine.constants import LOCAL, XGBOOST
+from submarine.constants import LOCAL, XGBOOST, DNN
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -29,27 +30,23 @@ if __name__ == "__main__":
     print("Tensorflow version :", tf.version.VERSION)
 
     # Data ingestion
-    taxi_data = Data(source_url="data/taxi_data/data.csv", data_type="pandas", engine="LOCAL")
+    taxi_data = Data(source_url="data/taxi_data/data.csv", data_type="pandas", runtime="LOCAL")
 
     # Data Transform
     taxi_data.handle_missing_values(taxi_data.columns, 'FILL_WITH_CONST')
     taxi_data.label_encoder(['company', 'payment_type'])
     taxi_data['tips'] = Data.greater(taxi_data['tips'], Data.multiply(taxi_data['fare'], 0.2))
-    taxi_data.split([0.5, 0.2, 0.3])  # [train, valid, test]
+    taxi_data.split([0.8, 0.1, 0.1])  # [train, valid, test]
 
     # TODO: Visualize data
 
     # Training
-    xgboost = Model(XGBOOST, LOCAL, taxi_data, classifier_model_registry)
     features = taxi_data.columns.drop('tips')
     label_feature = 'tips'
-    xgboost.train(features, label_feature)
+    xgboost = Model(model=DNN, runtime=LOCAL, data=taxi_data,
+                    registry=tensorflow_model_registry, feature=features, label_feature=label_feature)
+    xgboost.train()
 
     # Evaluate
-    print("Xgboost accuracy :", xgboost.evaluate(label_feature))
-
-    # Pusher
-    xgboost.push('./', LOCAL)
-
-    # Serving
-    # xgboost.serve('model.pkl', 'model_columns.pkl')
+    loss, acc = xgboost.evaluate()
+    print("Xgboost accuracy :", acc)
