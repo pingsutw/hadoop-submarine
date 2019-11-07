@@ -13,55 +13,45 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pandas as pd
-import submarine.pipeline.split
-import submarine.pipeline.utils
-from submarine.pipeline.transform import df_label_encoder, df_handle_missing_values,\
-    df_where, df_greater, df_concatenate, df_multiply
+from submarine.pipeline.utils import get_from_registry
+from submarine.pipeline.dataExecutor_registry import dataExecutor_registry
+from submarine.exceptions import PreprocessingException
 
 
-class Data:
+class DataManager:
     def __init__(self, source_url, data_type, runtime):
         self.source_url = source_url
         self.data_type = data_type
         self.runtime = runtime
+        self.executor = get_from_registry(data_type, dataExecutor_registry)()
         self.training_set = None
         self.valid_set = None
         self.test_set = None
-        self.data_set = None
-        self.columns = None
-
         self.data_set, self.columns = \
-            submarine.pipeline.utils.readDataSet(data_type, source_url)
-
-    def __getitem__(self, key):
-        return self.data_set[key]
-
-    def __setitem__(self, key, value):
-        self.data_set[key] = value
+            self.executor.readDataSet(source_url)
 
     def concatenate(self):
-        df_concatenate(self.training_set, self.valid_set, self.test_set)
+        self.executor.concatenate(self.training_set, self.valid_set, self.test_set)
 
-    def split(self, partition):
+    def splitData(self, partition):
         self.training_set, self.valid_set, self.test_set = \
-            submarine.pipeline.split.split_df(self.data_set, partition)
+            self.executor.split(self.data_set, partition)
 
     def handle_missing_values(self, features, strategy):
+        if features is None:
+            raise PreprocessingException("features must need a value")
         for feature in features:
-            df_handle_missing_values(self.data_set, feature, strategy)
+            self.data_set = self.executor.handle_missing_values(self.data_set, feature, strategy)
 
     def label_encoder(self, features):
         for feature in features:
-            df_label_encoder(self.data_set, feature)
+            self.data_set = self.executor.label_encoder(self.data_set, feature)
 
     def where(self, condition, x, y):
-        return df_where(self.data_set, condition, x, y)
+        return self.executor.where(self.data_set, condition, x, y)
 
-    @staticmethod
-    def greater(x, y):
-        return df_greater(x, y)
+    def greater(self, x, y):
+        return self.executor.greater(x, y)
 
-    @staticmethod
-    def multiply(x, y):
-        return df_multiply(x, y)
+    def multiply(self, x, y):
+        return self.executor.multiply(x, y)

@@ -13,13 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from submarine.pipeline.data import Data
-from submarine.pipeline.model import Model
+from submarine.pipeline.dataManager import DataManager
+from submarine.pipeline.modelManager import ModelManager
 from submarine.pipeline.model_registry import classifier_model_registry
 
 import tensorflow as tf
 import pandas as pd
-from submarine.constants import LOCAL
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -29,23 +28,24 @@ if __name__ == "__main__":
     print("Tensorflow version :", tf.version.VERSION)
 
     # Data ingestion
-    taxi_data = Data(source_url="data/taxi_data/data.csv", data_type="pandas", runtime="LOCAL")
-
+    dataManager = DataManager(source_url="data/taxi_data/data.csv", data_type="pandas", runtime="LOCAL")
     # Data Transform
-    taxi_data.handle_missing_values(taxi_data.columns, 'FILL_WITH_CONST')
-    taxi_data.label_encoder(['company', 'payment_type'])
-    taxi_data['tips'] = Data.greater(taxi_data['tips'], Data.multiply(taxi_data['fare'], 0.2))
-    taxi_data.split([0.6, 0.2, 0.2])  # [train, valid, test]
+    dataManager.handle_missing_values(dataManager.data_set.columns, 'FILL_WITH_CONST')
+    dataManager.label_encoder(['company', 'payment_type'])
+    dataManager.data_set['tips'] = dataManager.greater(
+        dataManager.data_set['tips'], dataManager.multiply(dataManager.data_set['fare'], 0.2))
+    dataManager.splitData([0.6, 0.2, 0.2])  # [train, valid, test]
 
     # TODO: Visualize data
 
     # Training
-    features = taxi_data.columns.drop('tips')
+    features = dataManager.data_set.columns.drop('tips')
     label_feature = 'tips'
-    xgboost = Model(model='DNN_keras', runtime='local', data=taxi_data,
-                    registry=classifier_model_registry, feature=features, label_feature=label_feature)
-    xgboost.train()
+    modelManager = ModelManager(model='xgboost', runtime='local',
+                                training_data=dataManager.training_set, validation_data=dataManager.valid_set,
+                                registry=classifier_model_registry, feature=features, label_feature=label_feature)
+    modelManager.train()
 
     # Evaluate
-    loss, acc = xgboost.evaluate()
+    loss, acc = modelManager.evaluate()
     print("Xgboost accuracy :", acc)

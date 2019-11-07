@@ -13,13 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import pandas as pd
-from os.path import basename, splitext, abspath
-import tensorflow as tf
-
-from submarine.constants import TENSORFLOW, PANDAS, CSV
-
 
 def get_from_registry(key, registry):
     if hasattr(key, 'upper'):
@@ -32,17 +25,3 @@ def get_from_registry(key, registry):
                 key, registry.keys()
             )
         )
-
-
-def readDataSet(data_type, source_url):
-    _, fileExtension = splitext(source_url)
-    if data_type == PANDAS:
-        if fileExtension == CSV:
-            data_set = pd.read_csv(source_url)
-            columns = data_set.columns
-            return data_set, columns
-    elif data_type == TENSORFLOW:
-        if fileExtension == CSV:
-            data_set = tf.keras.utils.get_file("data.csv", 'file://' + abspath(source_url))
-            return data_set, None
-    return None, None

@@ -30,7 +30,8 @@ setup(
         'sqlparse',
         'pymysql',
         'waitress',
-        'flask'
+        'flask',
+        'tensorflow==1.14.0'
     ],
     classifiers=[
         'Intended Audience :: Developers',

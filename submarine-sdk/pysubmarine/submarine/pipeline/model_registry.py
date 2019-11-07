@@ -13,12 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from submarine.pipeline.classifierModel.DNN_keras import DNN_keras
+from submarine.pipeline.classifierModel.keras_DNN import keras_DNN
 from submarine.pipeline.classifierModel.xgbost import xgboost
 
-from submarine.constants import XGBOOST, DNN_KERAS
+from submarine.constants import XGBOOST, KERAS_DNN
 
 classifier_model_registry = {
     XGBOOST: xgboost,
-    DNN_KERAS: DNN_keras
+    KERAS_DNN: keras_DNN
 }

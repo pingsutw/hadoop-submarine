@@ -17,8 +17,9 @@
 CSV = '.csv'
 
 # Data type
-PANDAS = 'pandas'
-TENSORFLOW = 'tensorflow'
+PANDAS = 'PANDAS'
+TENSORFLOW = 'TENSORFLOW'
+SPARK = 'SPARK'
 OBJECT = 'object'
 
 # Engine
@@ -29,5 +30,5 @@ FILL_WITH_CONST = 'FILL_WITH_CONST'
 
 # Models
 XGBOOST = 'XGBOOST'
-DNN_KERAS = 'DNN_KERAS'
+KERAS_DNN = 'KERAS_DNN'
 

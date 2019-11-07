@@ -13,27 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import tensorflow as tf
 from submarine.pipeline.utils import get_from_registry
-from submarine.constants import LOCAL
 
 
-class Model:
-    def __init__(self, model, runtime, data, registry, feature, label_feature, distributed=False, **kwargs):
+class ModelManager:
+    def __init__(self, model, runtime, training_data, validation_data,
+                 registry, feature, label_feature, distributed=False, **kwargs):
         self.model = get_from_registry(model, registry)(**kwargs)
         self.distributed = distributed
         self.runtime = runtime
         self.registry = registry
-        self.data = data
+        self.training_data = training_data
+        self.validation_data = validation_data
         self.feature = feature
         self.label_feature = label_feature
 
     def train(self):
-        self.model.fit(self.data.training_set[self.feature], self.data.training_set[self.label_feature])
+        self.model.fit(self.training_data[self.feature], self.training_data[self.label_feature])
 
     def predict(self):
         return self.model.predict(self.feature)
 
     def evaluate(self):
         # dataset = tf.data.Dataset.from_tensor_slices((self.data[self.feature].values, target.values))
-        return self.model.evaluate(self.data.valid_set[self.feature], self.data.valid_set[self.label_feature])
+        return self.model.evaluate(self.validation_data[self.feature], self.validation_data[self.label_feature])

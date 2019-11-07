@@ -13,24 +13,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
-from submarine.exceptions import PreprocessingException
-logger = logging.getLogger(__name__)
+from abc import abstractmethod, ABC
+from submarine.constants import FILL_WITH_CONST
 
 
-def split_df(dataframe, partition):
-    # df = pd.read_csv(input_path, header=header)
-    if len(partition) != 3:
-        raise PreprocessingException("Partition size should equal 3")
-    if (partition[0] + partition[1] + partition[2]) != 1:
-        raise PreprocessingException("Partition sum should equal 1")
+class dataExecutor(ABC):
+    @abstractmethod
+    def readDataSet(self, source_url):
+        pass
 
-    data_len = dataframe.shape[0]
-    train_len = int(data_len*partition[0])
-    valid_len = int(data_len*partition[1])
+    @abstractmethod
+    def concatenate(self, train_df, valid_df, test_df):
+        pass
 
-    train = dataframe.iloc[:train_len, ]
-    valid = dataframe.iloc[train_len:(train_len + valid_len), ]
-    test = dataframe.iloc[(train_len + valid_len):-1, ]
+    @abstractmethod
+    def split(self, dataframe, partition):
+        pass
 
-    return train, valid, test
+    @abstractmethod
+    def handle_missing_values(self, dataframe, feature, strategy=FILL_WITH_CONST):
+        pass
+
+    @abstractmethod
+    def label_encoder(self, dataframe, feature):
+        pass
+
+    @abstractmethod
+    def where(self, dataframe, condition, x, y):
+        pass
+
+    @abstractmethod
+    def greater(self, x, y):
+        pass
+
+    @abstractmethod
+    def multiply(self, x, y):
+        pass

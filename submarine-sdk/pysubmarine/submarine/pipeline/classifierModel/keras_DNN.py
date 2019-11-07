@@ -16,10 +16,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from tensorflow import keras
 from tensorflow.keras import layers
-from submarine.pipeline.abstract_model import abstract_model
+from submarine.pipeline.abstractModel import abstract_model
 
 
-class DNN_keras(abstract_model):
+class keras_DNN(abstract_model):
     def __init__(self,  **kwargs):
         super(abstract_model, self).__init__()
         self.model = None
