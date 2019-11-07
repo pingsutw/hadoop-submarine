@@ -16,23 +16,24 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from tensorflow import keras
 from tensorflow.keras import layers
+from submarine.pipeline.abstract_model import abstract_model
 
 
-class DNN_Keras:
+class DNN_keras(abstract_model):
     def __init__(self,  **kwargs):
-        self.model = self.build_model()
+        super(abstract_model, self).__init__()
+        self.model = None
+        self.build_model()
         print(self.model.summary())
 
     def build_model(self):
         inputs = keras.Input(shape=(17,), name='taxi_data')
         x = layers.Dense(64, activation='relu')(inputs)
         x = layers.Dense(64, activation='relu')(x)
-        outputs = layers.Dense(2, activation='softmax')(x)
-        model = keras.Model(inputs=inputs, outputs=outputs, name='DNN')
-        model.compile(loss='sparse_categorical_crossentropy',
-                      optimizer=keras.optimizers.RMSprop(),
-                      metrics=['accuracy'])
-        return model
+        outputs = layers.Dense(2, activation="softmax")(x)
+        self.model = keras.Model(inputs=inputs, outputs=outputs, name='DNN')
+        self.model.compile(loss='sparse_categorical_crossentropy',
+                           optimizer=keras.optimizers.RMSprop(), metrics=['accuracy'])
 
     def fit(self, features, label_features):
         self.model.fit(features, label_features, batch_size=64,

@@ -15,12 +15,11 @@
 
 from submarine.pipeline.data import Data
 from submarine.pipeline.model import Model
-from submarine.pipeline.model_registry import classifier_model_registry,\
-    tensorflow_model_registry
+from submarine.pipeline.model_registry import classifier_model_registry
 
 import tensorflow as tf
 import pandas as pd
-from submarine.constants import LOCAL, XGBOOST, DNN
+from submarine.constants import LOCAL
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -36,15 +35,15 @@ if __name__ == "__main__":
     taxi_data.handle_missing_values(taxi_data.columns, 'FILL_WITH_CONST')
     taxi_data.label_encoder(['company', 'payment_type'])
     taxi_data['tips'] = Data.greater(taxi_data['tips'], Data.multiply(taxi_data['fare'], 0.2))
-    taxi_data.split([0.8, 0.1, 0.1])  # [train, valid, test]
+    taxi_data.split([0.6, 0.2, 0.2])  # [train, valid, test]
 
     # TODO: Visualize data
 
     # Training
     features = taxi_data.columns.drop('tips')
     label_feature = 'tips'
-    xgboost = Model(model=DNN, runtime=LOCAL, data=taxi_data,
-                    registry=tensorflow_model_registry, feature=features, label_feature=label_feature)
+    xgboost = Model(model='DNN_keras', runtime='local', data=taxi_data,
+                    registry=classifier_model_registry, feature=features, label_feature=label_feature)
     xgboost.train()
 
     # Evaluate

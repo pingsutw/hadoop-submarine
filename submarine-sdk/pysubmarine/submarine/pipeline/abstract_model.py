@@ -13,10 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.metrics import accuracy_score
+from abc import abstractmethod, ABC
 
 
-def accuracy(model, features, label_features):
-    y_pred = model.predict(features)
-    score = accuracy_score(label_features, y_pred)
-    return score
+class abstract_model(ABC):
+    @abstractmethod
+    def __init__(self,  **kwargs):
+        pass
+
+    @abstractmethod
+    def build_model(self):
+        pass
+
+    @abstractmethod
+    def fit(self, features, label_features):
+        pass
+
+    @abstractmethod
+    def evaluate(self, features, label_features):
+        pass
+
+    @abstractmethod
+    def predict(self, features):
+        pass

@@ -13,10 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.metrics import accuracy_score
+from __future__ import absolute_import, division, print_function, unicode_literals
+from xgboost import XGBClassifier
+from submarine.pipeline.evaluate import accuracy
+from submarine.pipeline.abstract_model import abstract_model
 
 
-def accuracy(model, features, label_features):
-    y_pred = model.predict(features)
-    score = accuracy_score(label_features, y_pred)
-    return score
+class xgboost(abstract_model):
+    def __init__(self,  **kwargs):
+        super(abstract_model, self).__init__()
+        self.model = None
+        self.build_model()
+
+    def build_model(self):
+        self.model = XGBClassifier(n_estimators=100)
+
+    def fit(self, features, label_features):
+        self.model.fit(features, label_features)
+
+    def evaluate(self, features, label_features):
+        return None, accuracy(self.model, features, label_features)
+
+    def predict(self, features):
+        self.model.predict(features)
