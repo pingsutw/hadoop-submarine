@@ -20,7 +20,9 @@ RUN apt-get -q update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JRE_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
+ENV LD_LIBRARY_PATH /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server
 
 # INSTALL Docker
 RUN \
