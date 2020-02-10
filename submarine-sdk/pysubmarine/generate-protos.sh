@@ -1,4 +1,5 @@
-# Licensed to the Apache Software Foundation (ASF) under one or more
+#!/usr/bin/env bash
+# Licensed to the Apache Software Foundation (ASF) under one or more                     
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
 # The ASF licenses this file to You under the Apache License, Version 2.0
@@ -13,12 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/env bash
-set -e
+set -ex
 
-FWDIR="$(cd "$(dirname "$0")"; pwd)"
-cd "$FWDIR"
-cd ..
+PROTOS="../../submarine-commons/commons-rpc/src/main/proto/"
+python -m grpc_tools.protoc -I../../submarine-commons/commons-rpc/src/main/proto/ --python_out=./submarine/proto --grpc_python_out=./submarine/proto ../../submarine-commons/commons-rpc/src/main/proto/SubmarineServerProtocol.proto
 
-pycodestyle --exclude="proto" --max-line-length=100  -- submarine tests
-pylint --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests
+OLD_IMPORT="import SubmarineServerProtocol_pb2 as SubmarineServerProtocol__pb2"
+NEW_IMPORT="import submarine.proto.SubmarineServerProtocol_pb2 as SubmarineServerProtocol__pb2"
+sed -i -e "s/${OLD_IMPORT}/${NEW_IMPORT}/g" "submarine/proto/SubmarineServerProtocol_pb2_grpc.py"
+

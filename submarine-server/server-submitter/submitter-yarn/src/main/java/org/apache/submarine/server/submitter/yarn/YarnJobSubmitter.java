@@ -27,9 +27,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.yarn.api.records.ApplicationId;
 import org.apache.hadoop.yarn.exceptions.YarnException;
+import org.apache.submarine.client.cli.param.runjob.RunJobParameters;
 import org.apache.submarine.commons.runtime.exception.SubmarineException;
 import org.apache.submarine.commons.runtime.param.Parameter;
-import org.apache.submarine.client.cli.param.ParametersHolder;
 import org.apache.submarine.commons.runtime.JobSubmitter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,8 +61,8 @@ public class YarnJobSubmitter implements JobSubmitter, CallbackHandler {
     // Write user's overridden conf to an xml to be localized.
     Configuration tonyConf = null;
     try {
-      tonyConf = YarnUtils.tonyConfFromClientContext(
-          (ParametersHolder) parameters);
+      tonyConf = YarnUtils.tonyConfFromClientContext((RunJobParameters) parameters.getParameters(),
+                parameters.getFramework());
     } catch (Exception e) {
       throw new SubmarineException("Failed to create tony conf from client context");
     }

@@ -29,7 +29,7 @@ class AbstractStore:
         Empty constructor for now. This is deliberately not marked as abstract, else every
         derived class would be forced to create one.
         """
-        pass
+        pass  # pylint: disable=unnecessary-pass
 
     def log_metric(self, job_name, metric):
         """
@@ -37,7 +37,7 @@ class AbstractStore:
         :param job_name: String id for the run
         :param metric: :py:class:`submarine.entities.Metric` instance to log
         """
-        pass
+        pass  # pylint: disable=unnecessary-pass
 
     def log_param(self, job_name, param):
         """
@@ -45,4 +45,4 @@ class AbstractStore:
         :param job_name: String id for the run
         :param param: :py:class:`submarine.entities.Param` instance to log
         """
-        pass
+        pass  # pylint: disable=unnecessary-pass

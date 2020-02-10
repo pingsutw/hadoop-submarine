@@ -24,15 +24,16 @@ setup(
     packages=find_packages(exclude=['tests', 'tests.*']),
     install_requires=[
         'six>=1.10.0',
+        'protobuf>=3.6.0',
         'numpy',
         'pandas',
         'sqlalchemy',
         'sqlparse',
         'pymysql',
+        'grpcio'
     ],
     classifiers=[
         'Intended Audience :: Developers',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.6',
     ],
 )
