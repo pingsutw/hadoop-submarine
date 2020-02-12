@@ -16,6 +16,9 @@
 
 set -ex
 
+FWDIR="$(cd "$(dirname "$0")"; pwd)"
+cd "$FWDIR"
+
 PROTOS="../../submarine-commons/commons-rpc/src/main/proto/"
 python -m grpc_tools.protoc -I../../submarine-commons/commons-rpc/src/main/proto/ --python_out=./submarine/proto --grpc_python_out=./submarine/proto ../../submarine-commons/commons-rpc/src/main/proto/SubmarineServerProtocol.proto
 
