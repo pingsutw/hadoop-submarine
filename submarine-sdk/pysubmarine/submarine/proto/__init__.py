@@ -12,13 +12,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-#!/usr/bin/env bash
-set -e
-
-FWDIR="$(cd "$(dirname "$0")"; pwd)"
-cd "$FWDIR"
-cd ..
-
-pycodestyle --exclude="proto" --max-line-length=100  -- submarine tests
-pylint --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests

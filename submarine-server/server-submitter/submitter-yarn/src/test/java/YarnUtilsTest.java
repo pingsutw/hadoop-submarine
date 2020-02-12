@@ -27,6 +27,7 @@ import org.apache.submarine.client.cli.param.runjob.PyTorchRunJobParameters;
 import org.apache.submarine.client.cli.param.runjob.TensorFlowRunJobParameters;
 import org.apache.submarine.client.cli.runjob.RunJobCli;
 import org.apache.submarine.client.cli.param.runjob.RunJobParameters;
+import org.apache.submarine.commons.runtime.Framework;
 import org.apache.submarine.commons.runtime.MockClientContext;
 import org.apache.submarine.commons.runtime.conf.SubmarineLogs;
 import org.apache.submarine.commons.runtime.RuntimeFactory;
@@ -93,8 +94,8 @@ public class YarnUtilsTest {
         (TensorFlowRunJobParameters) jobRunParameters;
 
     Configuration tonyConf = YarnUtils
-        .tonyConfFromClientContext(parametersHolder);
-    Assert.assertEquals(parametersHolder.getFramework().getValue(),
+        .tonyConfFromClientContext(jobRunParameters, parametersHolder.getFramework());
+    Assert.assertEquals(Framework.TENSORFLOW.getValue(),
             tonyConf.get(TonyConfigurationKeys.FRAMEWORK_NAME));
     Assert.assertEquals(jobRunParameters.getName(),
             tonyConf.get(TonyConfigurationKeys.APPLICATION_NAME));
@@ -136,12 +137,12 @@ public class YarnUtilsTest {
     assertTrue(RunJobParameters.class + " must be an instance of " +
                     PyTorchRunJobParameters.class,
             jobRunParameters instanceof PyTorchRunJobParameters);
-    PyTorchRunJobParameters tensorFlowParams =
+    PyTorchRunJobParameters pytorchFlowParams =
             (PyTorchRunJobParameters) jobRunParameters;
 
     Configuration tonyConf = YarnUtils
-            .tonyConfFromClientContext(parametersHolder);
-    Assert.assertEquals(parametersHolder.getFramework().getValue(),
+            .tonyConfFromClientContext(jobRunParameters, parametersHolder.getFramework());
+    Assert.assertEquals(Framework.PYTORCH.getValue(),
             tonyConf.get(TonyConfigurationKeys.FRAMEWORK_NAME));
     Assert.assertEquals(jobRunParameters.getName(),
             tonyConf.get(TonyConfigurationKeys.APPLICATION_NAME));
@@ -149,7 +150,7 @@ public class YarnUtilsTest {
             tonyConf.get(TonyConfigurationKeys.getContainerDockerKey()));
     Assert.assertEquals("3", tonyConf.get(TonyConfigurationKeys
             .getInstancesKey("worker")));
-    Assert.assertEquals(tensorFlowParams.getWorkerLaunchCmd(),
+    Assert.assertEquals(pytorchFlowParams.getWorkerLaunchCmd(),
             tonyConf.get(TonyConfigurationKeys
                     .getExecuteCommandKey("worker")));
     Assert.assertEquals("4096", tonyConf.get(TonyConfigurationKeys

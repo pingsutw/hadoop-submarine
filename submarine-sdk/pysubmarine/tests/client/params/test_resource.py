@@ -1,11 +1,11 @@
 # Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
+# contributor license agreements. See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
 # The ASF licenses this file to You under the Apache License, Version 2.0
 # (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
+# the License. You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,12 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/usr/bin/env bash
-set -e
+from submarine.client.params import Resource
 
-FWDIR="$(cd "$(dirname "$0")"; pwd)"
-cd "$FWDIR"
-cd ..
 
-pycodestyle --exclude="proto" --max-line-length=100  -- submarine tests
-pylint --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests
+def _check(resource, vcores, memory, gpu):
+    assert type(resource) == Resource
+    assert resource.vcores == vcores
+    assert resource.memory == memory
+    assert resource.gpu == gpu
+
+
+def test_createResource():
+    vcores = 4
+    memory = 2048
+    gpu = 1
+
+    resource = Resource(vcores=vcores, memory=memory, gpu=gpu)
+    _check(resource, vcores, memory, gpu)

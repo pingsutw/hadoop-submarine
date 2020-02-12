@@ -495,6 +495,7 @@
             <exclude>**/go.mod</exclude>
             <exclude>**/go.sum</exclude>
             <exclude>**/workbench-web/**</exclude>
+            <exclude>submarine-sdk/pysubmarine/submarine/proto/*</exclude>
           </excludes>
         </configuration>
       </plugin>

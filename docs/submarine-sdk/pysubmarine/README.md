@@ -24,6 +24,11 @@ git clone https://github.com/apache/submarine.git
 cd submarine/submarine-sdk/pysubmarine
 ```
 
+- Generate gRPC code
+```bash
+./generate-protos.sh
+```
+
 - Install pip package
 ```bash
 pip install .
