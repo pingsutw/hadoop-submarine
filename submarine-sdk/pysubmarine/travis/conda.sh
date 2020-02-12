@@ -37,6 +37,7 @@ python --version
 pip install --upgrade pip
 pip install -r ./submarine-sdk/pysubmarine/travis/test-requirements.txt
 
+bash ./submarine-sdk/pysubmarine/generate-protos.sh
 pip install ./submarine-sdk/pysubmarine/.
 # shellcheck disable=SC2155
 export SUBMARINE_HOME=$(pwd)
