@@ -502,6 +502,7 @@
             <exclude>**/*.xsd</exclude>
             <exclude>**/*.json</exclude>
             <exclude>**/*.conf</exclude>
+            <exclude>**/*.libsvm</exclude>
             <exclude>**/*.yaml</exclude>
             <exclude>**/src/main/resources/META-INF/services/org.apache.hadoop.security.SecurityInfo</exclude>
             <exclude>**/src/test/resources/typicalHistFolder/job1/application123-1-1-user1-SUCCEEDED.jhist</exclude>
@@ -516,7 +517,6 @@
             <exclude>**/workbench-web/**</exclude>
             <exclude>submarine-cloud/go.mod</exclude>
             <exclude>submarine-cloud/go.sum</exclude>
-            <exclude>submarine-sdk/pysubmarine/example/data/**</exclude>
           </excludes>
         </configuration>
       </plugin>
