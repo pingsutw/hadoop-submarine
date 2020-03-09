@@ -14,11 +14,14 @@
 # limitations under the License.
 
 #!/usr/bin/env bash
-set -e
+set -ex
 
 FWDIR="$(cd "`dirname $0`"; pwd)"
 cd "$FWDIR"
 cd ..
+ls
 
 pycodestyle --max-line-length=100  -- submarine tests
 pylint --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests
+
+# pytest --cov=submarine -vs
