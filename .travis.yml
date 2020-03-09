@@ -221,6 +221,16 @@ matrix:
       script:
         - ./submarine-sdk/pysubmarine/travis/lint.sh
 
+    - name: Test submarine sdk
+      language: python
+      python: 3.7
+      dist: xenial
+      env: NAME="Test Python SDK 3.7" TRAVIS_PYTHON_VERSION="3.7"
+      install:
+        - source ./submarine-sdk/pysubmarine/travis/conda.sh
+      script:
+        - ./submarine-sdk/pysubmarine/travis/lint.sh
+
     - name: Test submarine workbench-web VUE
       language: node_js
       node_js:

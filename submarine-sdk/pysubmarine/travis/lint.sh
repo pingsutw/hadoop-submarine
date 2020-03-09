@@ -24,4 +24,4 @@ ls
 pycodestyle --max-line-length=100  -- submarine tests
 pylint --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests
 
-# pytest --cov=submarine -vs
+pytest --cov=submarine -vs
