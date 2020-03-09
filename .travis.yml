@@ -218,10 +218,8 @@ matrix:
       env: NAME="Test Python SDK" TRAVIS_PYTHON_VERSION="3.6"
       install:
         - source ./submarine-sdk/pysubmarine/travis/conda.sh
-        - pip install -r ./submarine-sdk/pysubmarine/travis/lint-requirements.txt
       script:
         - ./submarine-sdk/pysubmarine/travis/lint.sh
-        - pytest --cov=submarine -vs
 
     - name: Test submarine workbench-web VUE
       language: node_js
