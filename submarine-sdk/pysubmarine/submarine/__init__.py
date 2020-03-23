@@ -13,12 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import submarine.tracking.fluent
-import submarine.tracking as tracking
+from submarine.tracking.fluent import log_param, log_metric
+from submarine.tracking import set_tracking_uri, get_tracking_uri
+from submarine.tracking.autologger import autolog
 
-log_param = submarine.tracking.fluent.log_param
-log_metric = submarine.tracking.fluent.log_metric
-set_tracking_uri = tracking.set_tracking_uri
-get_tracking_uri = tracking.get_tracking_uri
-
-__all__ = ["log_metric", "log_param", "set_tracking_uri", "get_tracking_uri"]
+__all__ = ["log_metric", "log_param", "set_tracking_uri", "get_tracking_uri", "autolog"]

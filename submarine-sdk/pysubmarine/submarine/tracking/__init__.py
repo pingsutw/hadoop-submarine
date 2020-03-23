@@ -14,6 +14,7 @@
 # limitations under the License.
 
 from submarine.tracking.client import SubmarineClient
+from submarine.tracking.autologger import autolog
 from submarine.tracking.utils import set_tracking_uri, get_tracking_uri, _TRACKING_URI_ENV_VAR, \
     _JOB_NAME_ENV_VAR
 
@@ -23,4 +24,5 @@ __all__ = [
     "set_tracking_uri",
     "_TRACKING_URI_ENV_VAR",
     "_JOB_NAME_ENV_VAR",
+    "autolog",
 ]

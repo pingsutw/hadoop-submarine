@@ -13,28 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from setuptools import setup, find_packages
+import logging
+import gorilla
+from submarine.tracking import tensorflow_logger
+
+logger = logging.getLogger(__name__)
 
 
-setup(
-    name='pysubmarine',
-    version='0.4.0-SNAPSHOT',
-    description="A python SDK for submarine",
-    url="https://github.com/apache/submarine",
-    packages=find_packages(exclude=['tests', 'tests.*']),
-    install_requires=[
-        'six>=1.10.0',
-        'numpy',
-        'pandas',
-        'sqlalchemy',
-        'sqlparse',
-        'pymysql',
-        'tensorflow>=1.14.0,<2.0.0',
-        'requests', 'gorilla'
-    ],
-    classifiers=[
-        'Intended Audience :: Developers',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.6',
-    ],
-)
+def autolog():
+    logging.info("start auto logging")
+    patches = gorilla.find_patches([tensorflow_logger])
+    for patch in patches:
+        gorilla.apply(patch)
