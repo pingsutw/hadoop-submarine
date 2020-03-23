@@ -13,16 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from submarine.tracking.client import SubmarineClient
-from submarine.tracking.autologger import autolog
-from submarine.tracking.utils import set_tracking_uri, get_tracking_uri, _TRACKING_URI_ENV_VAR, \
-    _JOB_NAME_ENV_VAR
+import logging
+import gorilla
+from submarine.tracking import tensorflow_logger
 
-__all__ = [
-    "SubmarineClient",
-    "get_tracking_uri",
-    "set_tracking_uri",
-    "_TRACKING_URI_ENV_VAR",
-    "_JOB_NAME_ENV_VAR",
-    "autolog",
-]
+logger = logging.getLogger(__name__)
+
+
+def autolog():
+    logging.info("start auto logging")
+    patches = gorilla.find_patches([tensorflow_logger])
+    for patch in patches:
+        gorilla.apply(patch)

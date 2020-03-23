@@ -14,7 +14,19 @@
 # limitations under the License.
 
 from submarine.ml.tensorflow.model import DeepFM
+# import comet_ml in the top of your file
+# from comet_ml import Experiment
+#
+# # Add the following code anywhere in your machine learning file
+# experiment = Experiment(api_key="ej6XeyCVjqHM8uLDNj5VGrzjP",
+#                         project_name="testing", workspace="pingsutw")
 import argparse
+import submarine
+from os import environ
+submarine.set_tracking_uri("mysql+pymysql://submarine:password@192.168.103.9:3306/submarine")
+environ["SUBMARINE_JOB_NAME"] = "application_12344444"
+print(environ["PATH"])
+submarine.autolog()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -27,8 +39,6 @@ if __name__ == '__main__':
 
     model = DeepFM(json_path=json_path)
 
-    if task_type == 'train':
-        model.train()
-    if task_type == 'evaluate':
-        result = model.evaluate()
-        print("Model metrics : ", result)
+    model.train()
+    result = model.evaluate()
+    print("Model metrics : ", result)

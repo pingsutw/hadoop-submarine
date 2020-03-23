@@ -36,6 +36,8 @@ setup(
         'python-dateutil >= 2.5.3',
         'pyarrow==0.17.0',
         'torch',
+        'requests',
+        'gorilla'
     ],
     classifiers=[
         'Intended Audience :: Developers',
