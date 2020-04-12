@@ -23,8 +23,8 @@ manage submarine tasks
 
 2. Create Submarine job client
 ```python
-from submarine.job import SubmarineJOBClient
-client = SubmarineJOBClient('localhost', 8080)
+from submarine.job import SubmarineJobClient
+client = SubmarineJobClient('localhost', 8080)
 ```
 3. Submit job
 ```python

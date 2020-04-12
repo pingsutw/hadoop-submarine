@@ -23,7 +23,7 @@ _PATH_PREFIX = "/api/v1/"
 JOBS = 'jobs'
 
 
-class SubmarineJOBClient:
+class SubmarineJobClient:
     def __init__(self, hostname, port):
         self.base_url = 'http://' + hostname + ':' + str(port)
 
