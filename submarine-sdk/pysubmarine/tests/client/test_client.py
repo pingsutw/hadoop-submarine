@@ -46,3 +46,11 @@ class TestSubmarineJobClient:
         assert response['jobId'] == 'job_1582524742595_0040'
         assert response['name'] == 'submarine'
         assert response['identifier'] == 'test'
+
+    def test_delete_job(self, mock_http_request):
+        client = SubmarineJobClient('submarine', 8080)
+        client.delete_job('job_1582524742595_004')
+        mock_http_request.assert_called_with('http://submarine:8080',
+                                             json_body=None,
+                                             endpoint='/api/v1/jobs/job_1582524742595_004',
+                                             method='DELETE')

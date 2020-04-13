@@ -39,3 +39,14 @@ class SubmarineJobClient:
         response = http_request(self.base_url, endpoint=endpoint,
                                 method='POST', json_body=json_body)
         return response
+
+    def delete_job(self, job_id):
+        """
+        delete a submarine job
+        :param job_id: submarine job ID
+        :return: requests.Response: the detailed info about deleted job
+        """
+        endpoint = _PATH_PREFIX + JOBS + '/' + job_id
+        response = http_request(self.base_url, endpoint=endpoint,
+                                method='DELETE', json_body=None)
+        return response

@@ -18,7 +18,7 @@ manage submarine tasks
 - [Deploy Submarine Server on Kubernetes](https://github.com/apache/submarine/blob/master/docs/submarine-server/setup-kubernetes.md)
 - [Deploy Tensorflow Operator on Kubernetes](https://github.com/apache/submarine/blob/master/docs/submarine-server/ml-frameworks/tensorflow.md)
 
-## Submit Job
+### Submit Job
 1. Create a job description for submarine client. e.g.[mnist.json](./mnist.json)
 
 2. Create Submarine job client
@@ -29,4 +29,8 @@ client = SubmarineJobClient('localhost', 8080)
 3. Submit job
 ```python
 response = client.submit_job('mnist.json')
+```
+### Delete job
+```python
+response = client.delete_job('job_1586791302310_0005')
 ```
