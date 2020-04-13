@@ -30,7 +30,7 @@ setup(
         'sqlparse',
         'pymysql',
         'tensorflow>=1.14.0,<2.0.0',
-        'requests', 'gorilla'
+        'requests'
     ],
     classifiers=[
         'Intended Audience :: Developers',

@@ -21,7 +21,6 @@ import submarine
 if __name__ == "__main__":
     # note: SUBMARINE_JOB_NAME should be set by submarine submitter
     environ["SUBMARINE_JOB_NAME"] = "application_1234"
-    submarine.set_tracking_uri("mysql+pymysql://submarine:password@192.168.103.9:3306/submarine")
     X = np.array([-2, -1, 0, 1, 2, 1]).reshape(-1, 1)
     y = np.array([0, 0, 1, 1, 1, 0])
     lr = LogisticRegression(solver='liblinear', max_iter=100)

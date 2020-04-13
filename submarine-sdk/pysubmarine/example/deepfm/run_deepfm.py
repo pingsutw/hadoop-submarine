@@ -12,20 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# import comet_ml in the top of your file
-# from comet_ml import Experiment
-#
-# # Add the following code anywhere in your machine learning file
-# experiment = Experiment(api_key="ej6XeyCVjqHM8uLDNj5VGrzjP",
-#                         project_name="testing", workspace="pingsutw")
+
 from submarine.ml.model import DeepFM
 import argparse
-import submarine
-from os import environ
-submarine.set_tracking_uri("mysql+pymysql://submarine:password@192.168.103.9:3306/submarine")
-environ["SUBMARINE_JOB_NAME"] = "application_12344444"
-print(environ["PATH"])
-submarine.autolog()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -38,6 +27,8 @@ if __name__ == '__main__':
 
     model = DeepFM(json_path=json_path)
 
-    model.train()
-    result = model.evaluate()
-    print("Model metrics : ", result)
+    if task_type == 'train':
+        model.train()
+    if task_type == 'evaluate':
+        result = model.evaluate()
+        print("Model metrics : ", result)
