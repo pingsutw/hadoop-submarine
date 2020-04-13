@@ -19,6 +19,7 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LineChartComponent } from '@submarine/pages/workbench/chart/line-chart.component';
 import { WorkbenchComponent } from '@submarine/pages/workbench/workbench.component';
 import { DataComponent } from './data/data.component';
 import { HomeComponent } from './home/home.component';
@@ -60,6 +61,10 @@ const routes: Routes = [
       {
         path: 'model',
         component: ModelComponent
+      },
+      {
+        path: 'chart',
+        component: LineChartComponent
       },
       {
         path: 'manager',

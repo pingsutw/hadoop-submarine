@@ -75,6 +75,11 @@ export class WorkbenchComponent implements OnInit {
       routerLink: '/workbench/model'
     },
     {
+      title: 'Experiment',
+      iconType: 'experiment',
+      routerLink: '/workbench/chart'
+    },
+    {
       title: 'Manager',
       iconType: 'setting',
       children: [

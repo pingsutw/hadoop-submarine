@@ -23,6 +23,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { WorkbenchRoutingModule } from '@submarine/pages/workbench/workbench-routing.module';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { ChartsModule } from 'ng2-charts';
+import { LineChartComponent } from './chart/line-chart.component';
 import { DataComponent } from './data/data.component';
 import { HomeComponent } from './home/home.component';
 import { InterpreterModule } from './interpreter/interpreter.module';
@@ -40,7 +42,8 @@ import { WorkspaceModule } from './workspace/workspace.module';
     WorkspaceComponent,
     JobComponent,
     DataComponent,
-    ModelComponent
+    ModelComponent,
+    LineChartComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +53,8 @@ import { WorkspaceModule } from './workspace/workspace.module';
     FormsModule,
     WorkspaceModule,
     JobModule,
-    InterpreterModule
+    InterpreterModule,
+    ChartsModule
   ]
 })
 export class WorkbenchModule {
