@@ -34,9 +34,13 @@
             ],
             "styles": [
               "src/theme.less",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/swagger-ui-dist/swagger-ui.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/swagger-ui-dist/swagger-ui-bundle.js",
+              "node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js"
+            ]
           },
           "configurations": {
             "production": {

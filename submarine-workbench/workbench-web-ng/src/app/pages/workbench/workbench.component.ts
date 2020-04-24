@@ -75,6 +75,11 @@ export class WorkbenchComponent implements OnInit {
       routerLink: '/workbench/model'
     },
     {
+      title: 'Swagger-ui',
+      iconType: 'experiment',
+      routerLink: '/workbench/swagger-ui'
+    },
+    {
       title: 'Manager',
       iconType: 'setting',
       children: [

@@ -30,7 +30,7 @@ const proxyConfig = [
   },
   {
     context: '/ws',
-    target: 'ws://localhost:8080',
+    target: 'ws://192.168.103.9:8080',
     secure: false,
     ws:true,
     changeOrigin: true

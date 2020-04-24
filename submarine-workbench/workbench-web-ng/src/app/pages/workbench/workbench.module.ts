@@ -32,6 +32,7 @@ import { ModelComponent } from './model/model.component';
 import { WorkbenchComponent } from './workbench.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { WorkspaceModule } from './workspace/workspace.module';
+import { SwaggerUiComponent } from './swagger-ui/swagger-ui.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { WorkspaceModule } from './workspace/workspace.module';
     WorkspaceComponent,
     JobComponent,
     DataComponent,
-    ModelComponent
+    ModelComponent,
+    SwaggerUiComponent
   ],
   imports: [
     CommonModule,

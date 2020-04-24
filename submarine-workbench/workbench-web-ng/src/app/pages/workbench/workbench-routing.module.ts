@@ -26,6 +26,7 @@ import { InterpreterComponent } from './interpreter/interpreter.component';
 import { JobComponent } from './job/job.component';
 import { ModelComponent } from './model/model.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
+import { SwaggerUiComponent } from './swagger-ui/swagger-ui.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,10 @@ const routes: Routes = [
       {
         path: 'model',
         component: ModelComponent
+      },
+      {
+        path: 'swagger-ui',
+        component: SwaggerUiComponent
       },
       {
         path: 'manager',

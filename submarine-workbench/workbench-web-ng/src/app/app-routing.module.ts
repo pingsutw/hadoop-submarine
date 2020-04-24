@@ -20,6 +20,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@submarine/core';
+import { SwaggerUiComponent } from '@submarine/pages/workbench/swagger-ui/swagger-ui.component';
 
 const routes: Routes = [
   {
