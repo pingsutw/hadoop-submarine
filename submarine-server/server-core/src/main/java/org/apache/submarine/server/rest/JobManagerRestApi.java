@@ -59,6 +59,8 @@ public class JobManagerRestApi {
   @Path(RestConstants.PING)
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(value = "Ping submarine server", response = String.class, tags = { "jobs"})
+  @ApiResponses(value = {
+          @ApiResponse(code = 200, message = "successful operation", response = String.class)})
   public Response ping() {
     return new JsonResponse.Builder<String>(Response.Status.OK)
         .success(true).result("Pong").build();
@@ -73,8 +75,7 @@ public class JobManagerRestApi {
   @Consumes({RestConstants.MEDIA_TYPE_YAML, MediaType.APPLICATION_JSON})
   @ApiOperation(value = "Create a job to server", response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
-          @ApiResponse(code = 200, message = "successful operation", response = Job.class),
-          @ApiResponse(code = 405, message = "Invalid input") })
+          @ApiResponse(code = 200, message = "successful operation", response = Job.class)})
   public Response createJob(JobSpec spec) {
     try {
       Job job = jobManager.createJob(spec);
@@ -93,8 +94,7 @@ public class JobManagerRestApi {
           response = Job.class, responseContainer = "List", tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class,
-                  responseContainer = "List"),
-          @ApiResponse(code = 400, message = "Invalid status value") })
+                  responseContainer = "List")})
   public Response listJob(@QueryParam("status") String status) {
     try {
       List<Job> jobList = jobManager.listJobsByStatus(status);
@@ -115,7 +115,6 @@ public class JobManagerRestApi {
           response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class),
-          @ApiResponse(code = 400, message = "Invalid ID supplied"),
           @ApiResponse(code = 404, message = "Job not found") })
   public Response getJob(@PathParam(RestConstants.JOB_ID) String id) {
     try {
@@ -133,7 +132,7 @@ public class JobManagerRestApi {
           response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class),
-          @ApiResponse(code = 405, message = "Invalid input") })
+          @ApiResponse(code = 404, message = "Job not found") })
   public Response patchJob(@PathParam(RestConstants.JOB_ID) String id, JobSpec spec) {
     try {
       Job job = jobManager.patchJob(id, spec);
@@ -154,7 +153,6 @@ public class JobManagerRestApi {
   @ApiOperation(value = "Delete the job", response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class),
-          @ApiResponse(code = 400, message = "Invalid ID supplied"),
           @ApiResponse(code = 404, message = "Job not found") })
   public Response deleteJob(@PathParam(RestConstants.JOB_ID) String id) {
     try {
