@@ -73,7 +73,7 @@ public class JobManagerRestApi {
    */
   @POST
   @Consumes({RestConstants.MEDIA_TYPE_YAML, MediaType.APPLICATION_JSON})
-  @ApiOperation(value = "Create a job to server", response = Job.class, tags = { "jobs"})
+  @ApiOperation(value = "Create a job", response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class)})
   public Response createJob(JobSpec spec) {
