@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiResponses;
 /**
  * Job Service REST API v1. It can accept {@link JobSpec} to create a job.
  */
-@Api(description = "the jobs API")
+@Api(description = "The job REST API")
 @Path(RestConstants.V1 + "/" + RestConstants.JOBS)
 @Produces({MediaType.APPLICATION_JSON + "; " + RestConstants.CHARSET_UTF8})
 public class JobManagerRestApi {
@@ -71,7 +71,7 @@ public class JobManagerRestApi {
    */
   @POST
   @Consumes({RestConstants.MEDIA_TYPE_YAML, MediaType.APPLICATION_JSON})
-  @ApiOperation(value = "Submit a job to server", response = Job.class, tags = { "jobs"})
+  @ApiOperation(value = "Create a job to server", response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class),
           @ApiResponse(code = 405, message = "Invalid input") })
@@ -111,7 +111,7 @@ public class JobManagerRestApi {
    */
   @GET
   @Path("/{id}")
-  @ApiOperation(value = "Find job by ID", notes = "Returns a single job",
+  @ApiOperation(value = "Find job by id", notes = "Return a single job",
           response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class),
@@ -129,7 +129,7 @@ public class JobManagerRestApi {
   @PATCH
   @Path("/{id}")
   @Consumes({RestConstants.MEDIA_TYPE_YAML, MediaType.APPLICATION_JSON})
-  @ApiOperation(value = "Updates a job in the submarine server with job spec",
+  @ApiOperation(value = "Update the job in the submarine server with job spec",
           response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class),
@@ -151,7 +151,7 @@ public class JobManagerRestApi {
    */
   @DELETE
   @Path("/{id}")
-  @ApiOperation(value = "Deletes a job", response = Job.class, tags = { "jobs"})
+  @ApiOperation(value = "Delete the job", response = Job.class, tags = { "jobs"})
   @ApiResponses(value = {
           @ApiResponse(code = 200, message = "successful operation", response = Job.class),
           @ApiResponse(code = 400, message = "Invalid ID supplied"),
