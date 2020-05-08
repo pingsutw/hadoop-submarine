@@ -51,7 +51,7 @@ const routes: Routes = [
         component: InterpreterComponent
       },
       {
-        path: 'job',
+        path: 'Experiment',
         component: JobComponent
       },
       {

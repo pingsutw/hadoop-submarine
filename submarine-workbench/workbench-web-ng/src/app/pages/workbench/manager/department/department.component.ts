@@ -18,12 +18,11 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
-import { DepartmentService } from '@submarine/services';
+import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { SysDeptItem } from '@submarine/interfaces/sys-dept-item';
 import { SysDeptSelect } from '@submarine/interfaces/sys-dept-select';
+import { DepartmentService } from '@submarine/services';
 import { NzMessageService } from 'ng-zorro-antd';
-
 
 @Component({
   selector: 'app-department',
@@ -31,7 +30,7 @@ import { NzMessageService } from 'ng-zorro-antd';
   styleUrls: ['./department.component.scss']
 })
 export class DepartmentComponent implements OnInit {
-  //About display departments
+  // About display departments
   sysTreeParent: SysDeptSelect[] = [];
   sysDeptTreeList: SysDeptItem[] = [];
   listOfMapData: SysDeptItem[] = [];
@@ -40,7 +39,7 @@ export class DepartmentComponent implements OnInit {
   isExpandTable = true;
   filterArr: SysDeptItem[] = [];
   mapOfExpandedData: { [key: string]: SysDeptItem[] } = {};
-  //About new or edit department
+  // About new or edit department
   newDepartmentForm: FormGroup;
   editMode = false;
   editNode: SysDeptItem;
@@ -49,7 +48,7 @@ export class DepartmentComponent implements OnInit {
   parentCodeValid = true;
   isVisible = false;
 
-  constructor(private departmentService: DepartmentService, private nzMessageService:NzMessageService) { }
+  constructor(private departmentService: DepartmentService, private nzMessageService: NzMessageService) { }
 
   ngOnInit() {
     this.dapartmentDictForm = new FormGroup({
@@ -67,22 +66,22 @@ export class DepartmentComponent implements OnInit {
     this.loadDepartment();
   }
 
-  queryDepartment(){
+  queryDepartment() {
     this.filterArr = [];
     Object.keys(this.mapOfExpandedData).forEach(item => {
       this.mapOfExpandedData[item].forEach(node => {
-        if (node.deptName.includes(this.dapartmentDictForm.get('departmentName').value) && node.deptCode.includes(this.dapartmentDictForm.get('departmentCode').value)){
+        if (node.deptName.includes(this.dapartmentDictForm.get('departmentName').value) && node.deptCode.includes(this.dapartmentDictForm.get('departmentCode').value)) {
           this.filterArr.push(node);
         }
-      });   
+      });
     });
     this.isExpandTable = false;
-    this.filterArr=[...this.filterArr];
+    this.filterArr = [...this.filterArr];
   }
 
-  submitDepartment(){
+  submitDepartment() {
     this.submitBtnIsLoading = true;
-    if (this.editMode === true){
+    if (this.editMode === true) {
       this.editNode.deptName = this.newDepartmentForm.get('name').value;
       this.editNode.deptCode = this.newDepartmentForm.get('code').value;
       this.editNode.description = this.newDepartmentForm.get('description').value;
@@ -90,8 +89,7 @@ export class DepartmentComponent implements OnInit {
       this.editNode.sortOrder = this.newDepartmentForm.get('sort').value;
       this.editNode.parentCode = this.newDepartmentForm.get('parent').value;
       this.setDepartment(this.editNode);
-    }
-    else{
+    } else {
       this.departmentService.createDept({
         deptName: this.newDepartmentForm.get('name').value,
         deptCode: this.newDepartmentForm.get('code').value,
@@ -111,7 +109,7 @@ export class DepartmentComponent implements OnInit {
     }
   }
 
-  addDept(){
+  addDept() {
     this.departmentService.fetchSysDeptSelect().subscribe(list => {
       this.sysTreeParent = list;
     });
@@ -125,11 +123,11 @@ export class DepartmentComponent implements OnInit {
       'description' : new FormControl("")
     });
     this.formCodeErrMsg = "Please entry department code!";
-    this.isVisible=true;
+    this.isVisible = true;
     this.editMode = false;
   }
 
-  loadDepartment(){
+  loadDepartment() {
     this.departmentService.fetchSysDeptList().subscribe(list => {
       this.listOfMapData = list;
       this.listOfMapData.forEach(item => {
@@ -139,7 +137,7 @@ export class DepartmentComponent implements OnInit {
     });
   }
 
-  setDepartment(node: SysDeptItem){
+  setDepartment(node: SysDeptItem) {
     this.departmentService.editDept(
       {
         deptCode: node.deptCode,
@@ -160,24 +158,24 @@ export class DepartmentComponent implements OnInit {
     });
   }
 
-  deleteDepartment(node: SysDeptItem){
+  deleteDepartment(node: SysDeptItem) {
     node.deleted = 1;
     this.setDepartment(node);
   }
 
-  restoreDepartment(node: SysDeptItem){
+  restoreDepartment(node: SysDeptItem) {
     node.deleted = 0;
     this.setDepartment(node);
   }
 
-  editDepartment(node: SysDeptItem){
+  editDepartment(node: SysDeptItem) {
     this.departmentService.fetchSysDeptSelect().subscribe(list => {
       this.sysTreeParent = list;
     });
     this.newDepartmentForm = new FormGroup({
       'code': new FormControl(node.deptCode, [Validators.required, this.checkRequire.bind(this), this.checkIfParent.bind(this)], this.duplicateDeptCodeCheck.bind(this)),
       'name': new FormControl(node.deptName, Validators.required),
-      'parent': new FormControl(node.parent?node.parent.key:null),
+      'parent': new FormControl(node.parent ? node.parent.key : null),
       'sort': new FormControl(node.sortOrder),
       'deleted': new FormControl(node.deleted === 0 ? true : false),
       'description' : new FormControl(node.description)
@@ -185,7 +183,7 @@ export class DepartmentComponent implements OnInit {
     this.editNode = node;
     this.editMode = true;
     this.isVisible = true;
-    this.parentCodeValid = true;;
+    this.parentCodeValid = true; ;
   }
 
   collapse(array: SysDeptItem[], data: SysDeptItem, $event: boolean): void {
@@ -194,7 +192,7 @@ export class DepartmentComponent implements OnInit {
         data.children.forEach(d => {
           const target = array.find(a => a.key === d.key)!;
           target.expand = false;
-          if (target.key === data.key) return;
+          if (target.key === data.key) { return; }
           this.collapse(array, target, false);
         });
       } else {
@@ -228,86 +226,80 @@ export class DepartmentComponent implements OnInit {
     }
   }
 
-  showParent(node: SysDeptItem){
+  showParent(node: SysDeptItem) {
     if (node.parent) {
       return node.parent.deptName;
     }
     return 'None'
   }
 
-  duplicateDeptCodeCheck(control: FormControl): Promise<ValidationErrors|null>{
-    var params = {
+  duplicateDeptCodeCheck(control: FormControl): Promise<ValidationErrors|null> {
+    const params = {
       tableName: 'sys_department',
       fieldName: 'dept_code',
       fieldVal: control.value,
-      dataId: this.editMode? this.editNode.id :undefined
+      dataId: this.editMode ? this.editNode.id : undefined
     }
     const promise = new Promise((resolve, reject) => {
       this.departmentService.codeCheck(params).then((success) => {
-        if (success){
+        if (success) {
           resolve(null);
-        }
-        else{
+        } else {
           this.formCodeErrMsg = "This value already exists is not available!";
           resolve({"Duplicate Code": true});
         }
-      },(err)=>{
+      }, (err) => {
         reject(err);
       });
     });
     return promise;
   }
 
-  checkIfParent(control: FormControl): {[key: string]:any}|null{
-    if (this.editMode){
-      if(this.editNode.children == null||this.editNode.deptCode===control.value){
+  checkIfParent(control: FormControl): {[key: string]: any}|null {
+    if (this.editMode) {
+      if (this.editNode.children == null || this.editNode.deptCode === control.value) {
         return null;
-      }
-      else{
+      } else {
         console.log(this.newDepartmentForm.get('code'))
-        var mesg = this.editNode.deptCode + 'is the parent code of other departments, can not be modified!';
+        const mesg = this.editNode.deptCode + 'is the parent code of other departments, can not be modified!';
         this.formCodeErrMsg = mesg;
         return {mesg: true};
       }
-    }
-    else{
+    } else {
       return null;
     }
   }
 
-  checkRequire(control: FormControl): {[key: string]:any}|null{
-    if (control.value === ""){
-      var mesg = "Please enter department code!";
+  checkRequire(control: FormControl): {[key: string]: any}|null {
+    if (control.value === "") {
+      const mesg = "Please enter department code!";
       this.formCodeErrMsg = mesg;
       return {mesg: true}
-    }
-    else{
+    } else {
       this.formCodeErrMsg = "";
       return null;
     }
   }
 
-  //Use code to find node
-  checkNodeCode(node: SysDeptItem, targetCode: string, checkExistCode: string){
+  // Use code to find node
+  checkNodeCode(node: SysDeptItem, targetCode: string, checkExistCode: string) {
     if (node.deptCode === targetCode) {
       this.checkCodeExist(node, checkExistCode);
-    }
-    else{
-      if (node.children !== null){
-        for (let i=0;i<node.children.length;i++){
+    } else {
+      if (node.children !== null) {
+        for (let i = 0; i < node.children.length; i++) {
           this.checkNodeCode(node.children[i], targetCode, checkExistCode);
         }
       }
     }
   }
 
-  //Check node exist under the node
-  checkCodeExist(node: SysDeptItem, targetCode: string){
-    if (node.deptCode === targetCode){
+  // Check node exist under the node
+  checkCodeExist(node: SysDeptItem, targetCode: string) {
+    if (node.deptCode === targetCode) {
       this.parentCodeValid = false;
-    }
-    else{
-      if (node.children !== null){
+    } else {
+      if (node.children !== null) {
         node.children.forEach(element => {
           this.checkCodeExist(element, targetCode);
         });
@@ -316,11 +308,11 @@ export class DepartmentComponent implements OnInit {
     }
   }
 
-  checkEditParent(control: FormControl): {[key: string]:any}|null{
+  checkEditParent(control: FormControl): {[key: string]: any}|null {
     this.parentCodeValid = true;
-    if (this.editMode){
+    if (this.editMode) {
       this.listOfMapData.forEach(element => {
-        this.checkNodeCode(element, this.editNode.deptCode,control.value);
+        this.checkNodeCode(element, this.editNode.deptCode, control.value);
       });
     }
     return null;

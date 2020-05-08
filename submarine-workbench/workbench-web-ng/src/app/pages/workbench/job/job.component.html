@@ -24,11 +24,11 @@
         <nz-breadcrumb-item>
           <a [routerLink]="['/', 'workbench', 'home']">Home</a>
         </nz-breadcrumb-item>
-        <nz-breadcrumb-item>Job</nz-breadcrumb-item>
+        <nz-breadcrumb-item>job</nz-breadcrumb-item>
       </nz-breadcrumb>
       <br/>
-      <h2>Job</h2>
-      <nz-content>A job is a way of running a notebook or on a scheduled basis.</nz-content>
+      <h2>Experiment</h2>
+      <nz-content>A experiment is a way of running a adhoc, pre-defined or pipeline on a scheduled basis.</nz-content>
       <br/>
     </div>
   </nz-layout>
@@ -45,9 +45,9 @@
       <ng-template #suffixIconButton>
         <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
       </ng-template>
-        
+
       <button nz-button id="openJob" nzType="primary" style="margin-right: 30px;margin-bottom: 15px;margin-top: 15px;" (click)="isVisible=true;"><i nz-icon nzType="plus"></i>New Job</button>
-    </div>  
+    </div>
     <nz-table id="releaseTable" nzBordered #basicTable [nzData]="joblist" [nzNoResult]="'No data'">
       <thead>
         <tr>
@@ -83,7 +83,7 @@
       (nzOnCancel)="isVisible=false;"
       [nzWidth]="740"
   >
-    <div >
+    <div>
       <nz-steps [nzCurrent]="current">
         <nz-step nzTitle="Basic Information"></nz-step>
         <nz-step nzTitle="Configuration"></nz-step>
@@ -100,7 +100,7 @@
         <div [ngSwitch]="current" style="margin-top: 30px;">
           <div *ngSwitchCase="0">
             <div>
-              <label class="form-label"><span class="red-star">* </span> Job Name:</label>
+              <label class="form-label"><span class="red-star">* </span> Experiment Name:</label>
               <input type="text" id="jobname" style="margin-top: 32px;width: 350px;" class="form-control" formControlName="jobName">
             </div>
             <div>

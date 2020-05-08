@@ -60,9 +60,9 @@ export class WorkbenchComponent implements OnInit {
       routerLink: '/workbench/interpreter'
     },
     {
-      title: 'Job',
+      title: 'Experiment',
       iconType: 'cluster',
-      routerLink: '/workbench/job'
+      routerLink: '/workbench/Experiment'
     },
     {
       title: 'Data',
@@ -75,7 +75,7 @@ export class WorkbenchComponent implements OnInit {
       routerLink: '/workbench/model'
     },
     {
-      title: 'Experiment',
+      title: 'Track',
       iconType: 'experiment',
       routerLink: '/workbench/chart'
     },

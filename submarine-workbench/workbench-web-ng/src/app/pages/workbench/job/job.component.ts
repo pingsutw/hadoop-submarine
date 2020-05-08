@@ -18,7 +18,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'submarine-job',
@@ -27,10 +27,11 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 })
 export class JobComponent implements OnInit {
 
-  //About show existing jobs
+  // About show existing experiments
   showJob = 'All';
   searchText = '';
-  joblist=[
+  // TODO(Kevin): Use Rest API to get experiments
+  joblist = [
     {
       name: 'Spark actuator',
       id: 1,
@@ -41,7 +42,7 @@ export class JobComponent implements OnInit {
       lastRun: '2009-09-24 20:38:24'
     }
   ]
-  //About new Job
+  // About new experiment
   createJob: FormGroup;
   current = 0;
   okText = 'Next Step';
@@ -67,37 +68,35 @@ export class JobComponent implements OnInit {
     });
   }
 
-  handleOk(){
-    if (this.current === 1){
+  handleOk() {
+    if (this.current === 1) {
       this.okText = 'Complete';
       this.current++;
-    }
-    else if (this.current === 2){
+    } else if (this.current === 2) {
       this.okText = 'Next Step';
       this.current = 0;
       this.isVisible = false;
-      //TODO(jasoonn): Create Real Job
+      // TODO(jasoonn): Create Real Job
       console.log(this.createJob);
-    }
-    else {
+    } else {
       this.current++;
     }
   }
 
-  //TODO(jasoonn): Filter Job list
-  filter(event){
-    console.log(this.searchText+event.key);
+  // TODO(jasoonn): Filter Job list
+  filter(event) {
+    console.log(this.searchText + event.key);
   }
-  //TODO(jasoonn): Perfrom part of list
-  showChange(){
+  // TODO(jasoonn): Perfrom part of list
+  showChange() {
     console.log("Change to " + this.showJob);
   }
-  //TODO(jasoonn): Start Job
-  startJob(job){
+  // TODO(jasoonn): Start Job
+  startJob(job) {
     console.log(job);
   }
-  //TODO(jasoonn): Edit job
-  editJob(job){
+  // TODO(jasoonn): Edit job
+  editJob(job) {
     console.log(job);
   }
 }
