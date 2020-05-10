@@ -33,39 +33,27 @@ export class ExperimentComponent implements OnInit {
   // About show existing experiments
   showJob = 'All';
   searchText = '';
-  // TODO(Kevin): Use Rest API to get experiments
-  // experimentList = [
-  //   {
-  //     name: 'Spark actuator',
-  //     id: 1,
-  //     owner: 'Frank',
-  //     actuator: 'Spark Actuator',
-  //     status: 'Running',
-  //     progress: 85,
-  //     lastRun: '2009-09-24 20:38:24'
-  //   }
-  // ]
+
   // About new experiment
   createJob: FormGroup;
   current = 0;
   okText = 'Next Step';
   isVisible = false;
 
-  monitorObjects = ['Table1', 'Table2'];
+  ExperimentSpecs = ['Adhoc', 'Predefined'];
   ruleTemplates = ['Template1', 'Template2'];
   ruleTypes = ['Strong', 'Weak'];
-
   scheduleCycles = ['Month', 'Week'];
 
   constructor(
-    private experimentService: ExperimentService
+    private experimentService: ExperimentService,
   ) { }
 
   ngOnInit() {
     this.createJob =  new FormGroup({
       'jobName': new FormControl(null, Validators.required),
       'description': new FormControl(null, [Validators.required]),
-      'monitorObject': new FormControl('Table1'),
+      'experimentSpec': new FormControl('Adhoc'),
       'ruleTemplate': new FormControl('Template1'),
       'ruleType': new FormControl('Strong'),
       'startDate': new FormControl(new Date()),
@@ -76,13 +64,13 @@ export class ExperimentComponent implements OnInit {
 
   handleOk() {
     if (this.current === 1) {
-      this.okText = 'Complete';
+      this.okText = 'Submit';
       this.current++;
     } else if (this.current === 2) {
       this.okText = 'Next Step';
       this.current = 0;
       this.isVisible = false;
-      // TODO(jasoonn): Create Real Job
+      // TODO(jasoonn): Create Real experiment
       console.log(this.createJob);
     } else {
       this.current++;
@@ -97,15 +85,15 @@ export class ExperimentComponent implements OnInit {
       });
   }
 
-  // TODO(jasoonn): Filter Job list
+  // TODO(jasoonn): Filter experiment list
   filter(event) {
     console.log(this.searchText + event.key);
   }
-  // TODO(jasoonn): Perfrom part of list
+  // TODO(jasoonn): Perform part of list
   showChange() {
     console.log("Change to " + this.showJob);
   }
-  // TODO(jasoonn): Start Job
+  // TODO(jasoonn): Start experiment
   startJob(job) {
     console.log(job);
   }

@@ -18,5 +18,8 @@
  */
 
 export class ExperimentSpec {
-
+  name: string;
+  namespace: string;
+  librarySpec: string;
+  taskSpecs: string;
 }

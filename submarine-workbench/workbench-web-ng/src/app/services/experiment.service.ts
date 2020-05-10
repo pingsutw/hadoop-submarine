@@ -21,6 +21,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ListResult, Rest } from '@submarine/interfaces';
 import { ExperimentInfo } from '@submarine/interfaces/experiment-info';
+import { SysDeptItem } from '@submarine/interfaces/sys-dept-item';
 import { BaseApiService } from '@submarine/services/base-api.service';
 import { of, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -43,6 +44,20 @@ export class ExperimentService {
           return of(res.result);
         } else {
           throw this.baseApi.createRequestError(res.message, res.code, apiUrl, 'get');
+        }
+      })
+    );
+  }
+
+  createExperiment(experiment): Observable<ExperimentInfo> {
+    const apiUrl = this.baseApi.getRestApi('/v1/jobs');
+    return this.httpClient.post<Rest<ExperimentInfo>>(apiUrl, experiment).pipe(
+      switchMap(res => {
+        if (res.success) {
+          console.log("success", res)
+          return of(res.result);
+        } else {
+          throw this.baseApi.createRequestError(res.message, res.code, apiUrl, 'post', experiment);
         }
       })
     );
