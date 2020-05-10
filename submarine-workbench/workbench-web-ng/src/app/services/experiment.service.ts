@@ -16,3 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ListResult, Rest } from '@submarine/interfaces';
+import { ExperimentInfo } from '@submarine/interfaces/experiment-info';
+import { BaseApiService } from '@submarine/services/base-api.service';
+import { of, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ExperimentService {
+  constructor(private baseApi: BaseApiService, private httpClient: HttpClient) {
+  }
+
+  fetchExperimentList(): Observable<ExperimentInfo[]> {
+    const apiUrl = this.baseApi.getRestApi('/v1/jobs');
+    return this.httpClient.get<Rest<any>>(apiUrl).pipe(
+      switchMap(res => {
+        // TODO(pingsutw): res.success should not return NULL
+        // @ts-ignore
+        if (res.status === 'OK') {
+          console.log(res.result);
+          return of(res.result);
+        } else {
+          throw this.baseApi.createRequestError(res.message, res.code, apiUrl, 'get');
+        }
+      })
+    );
+  }
+}

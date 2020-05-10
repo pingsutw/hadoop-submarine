@@ -48,7 +48,7 @@ export class DepartmentService {
     );
   }
 
-  fetchSysDeptList() : Observable<SysDeptItem[]> {
+  fetchSysDeptList(): Observable<SysDeptItem[]> {
     const apiUrl = this.baseApi.getRestApi('/sys/dept/tree');
     return this.httpClient.get<Rest<any>>(apiUrl).pipe(
       switchMap(res => {
@@ -65,7 +65,7 @@ export class DepartmentService {
   codeCheck(codeParams): Promise<ValidationErrors|null> {
     const promise = new Promise((resolve, reject) => {
       const apiUrl = this.baseApi.getRestApi('/sys/duplicateCheck');
-      this.httpClient.get<any>(apiUrl,{
+      this.httpClient.get<any>(apiUrl, {
         params: codeParams
       }).toPromise()
       .then((res: any) => {

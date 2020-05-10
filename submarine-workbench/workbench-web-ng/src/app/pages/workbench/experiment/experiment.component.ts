@@ -18,30 +18,33 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ExperimentInfo } from '@submarine/interfaces/experiment-info';
+import { ExperimentService } from '@submarine/services/experiment.service';
 
 @Component({
   selector: 'submarine-job',
-  templateUrl: './job.component.html',
-  styleUrls: ['./job.component.scss']
+  templateUrl: './experiment.component.html',
+  styleUrls: ['./experiment.component.scss']
 })
-export class JobComponent implements OnInit {
+export class ExperimentComponent implements OnInit {
 
+  experimentList: ExperimentInfo[] = [];
   // About show existing experiments
   showJob = 'All';
   searchText = '';
   // TODO(Kevin): Use Rest API to get experiments
-  joblist = [
-    {
-      name: 'Spark actuator',
-      id: 1,
-      owner: 'Frank',
-      actuator: 'Spark Actuator',
-      status: 'Running',
-      progress: 85,
-      lastRun: '2009-09-24 20:38:24'
-    }
-  ]
+  // experimentList = [
+  //   {
+  //     name: 'Spark actuator',
+  //     id: 1,
+  //     owner: 'Frank',
+  //     actuator: 'Spark Actuator',
+  //     status: 'Running',
+  //     progress: 85,
+  //     lastRun: '2009-09-24 20:38:24'
+  //   }
+  // ]
   // About new experiment
   createJob: FormGroup;
   current = 0;
@@ -54,7 +57,9 @@ export class JobComponent implements OnInit {
 
   scheduleCycles = ['Month', 'Week'];
 
-  constructor() { }
+  constructor(
+    private experimentService: ExperimentService
+  ) { }
 
   ngOnInit() {
     this.createJob =  new FormGroup({
@@ -66,6 +71,7 @@ export class JobComponent implements OnInit {
       'startDate': new FormControl(new Date()),
       'scheduleCycle': new FormControl('Month')
     });
+    this.loadExperiment();
   }
 
   handleOk() {
@@ -83,6 +89,14 @@ export class JobComponent implements OnInit {
     }
   }
 
+  loadExperiment() {
+    this.experimentService
+      .fetchExperimentList()
+      .subscribe((  list ) => {
+        this.experimentList = list;
+      });
+  }
+
   // TODO(jasoonn): Filter Job list
   filter(event) {
     console.log(this.searchText + event.key);
@@ -95,7 +109,7 @@ export class JobComponent implements OnInit {
   startJob(job) {
     console.log(job);
   }
-  // TODO(jasoonn): Edit job
+  // TODO(jasoonn): Edit experiment
   editJob(job) {
     console.log(job);
   }

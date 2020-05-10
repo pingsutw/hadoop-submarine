@@ -24,13 +24,13 @@ dotenv.config();
 const proxyConfig = [
   {
     context: ['/api'],
-    target: 'http://localhost:8080',
+    target: 'http://192.168.103.9:8080',
     secure: false,
     changeOrigin: true
   },
   {
     context: '/ws',
-    target: 'ws://localhost:8080',
+    target: 'ws://192.168.103.9:8080',
     secure: false,
     ws:true,
     changeOrigin: true
