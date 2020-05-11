@@ -18,8 +18,5 @@
  */
 
 export class ExperimentSpec {
-  name: string;
-  namespace: string;
-  librarySpec: string;
-  taskSpecs: string;
+   // TODO(pingsutw): After submarine experiment spec refactor, we could  start implementing it.
 }

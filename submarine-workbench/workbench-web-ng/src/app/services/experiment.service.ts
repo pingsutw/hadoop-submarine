@@ -35,7 +35,7 @@ export class ExperimentService {
 
   fetchExperimentList(): Observable<ExperimentInfo[]> {
     const apiUrl = this.baseApi.getRestApi('/v1/jobs');
-    return this.httpClient.get<Rest<any>>(apiUrl).pipe(
+    return this.httpClient.get<Rest<ExperimentInfo[]>>(apiUrl).pipe(
       switchMap(res => {
         // TODO(pingsutw): res.success should not return NULL
         // @ts-ignore
@@ -49,15 +49,44 @@ export class ExperimentService {
     );
   }
 
-  createExperiment(experiment): Observable<ExperimentInfo> {
+  createExperiment(experimentSpec): Observable<ExperimentInfo> {
     const apiUrl = this.baseApi.getRestApi('/v1/jobs');
-    return this.httpClient.post<Rest<ExperimentInfo>>(apiUrl, experiment).pipe(
+    return this.httpClient.post<Rest<ExperimentInfo>>(apiUrl, experimentSpec).pipe(
       switchMap(res => {
-        if (res.success) {
+        if (res.status === 'OK') {
           console.log("success", res)
           return of(res.result);
         } else {
-          throw this.baseApi.createRequestError(res.message, res.code, apiUrl, 'post', experiment);
+          throw this.baseApi.createRequestError(res.message, res.code, apiUrl, 'post', experimentSpec);
+        }
+      })
+    );
+  }
+
+  editExperiment(experimentSpec): Observable<ExperimentInfo> {
+    const apiUrl = this.baseApi.getRestApi('/v1/jobs');
+    return this.httpClient.patch<Rest<ExperimentInfo>>(apiUrl, experimentSpec).pipe(
+      switchMap(res => {
+        if (res.status === 'OK') {
+          console.log("success", res)
+          return of(res.result);
+        } else {
+          throw this.baseApi.createRequestError(res.message, res.code, apiUrl, 'patch', experimentSpec);
+        }
+      })
+    );
+  }
+
+  deleteExperiment(id: string): Observable<ExperimentInfo> {
+    const apiUrl = this.baseApi.getRestApi('/v1/jobs/' + id);
+    return this.httpClient.delete<Rest<any>>(apiUrl).pipe(
+      switchMap(res => {
+        if (res.status === 'OK') {
+          console.log("success", res)
+          return of(res.result);
+        } else {
+          console.log("deleteExperiment error", res)
+          throw this.baseApi.createRequestError(res.message, res.code, apiUrl, 'delete', id);
         }
       })
     );

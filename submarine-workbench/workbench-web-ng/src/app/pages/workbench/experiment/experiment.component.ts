@@ -21,6 +21,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ExperimentInfo } from '@submarine/interfaces/experiment-info';
 import { ExperimentService } from '@submarine/services/experiment.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'submarine-job',
@@ -47,6 +48,7 @@ export class ExperimentComponent implements OnInit {
 
   constructor(
     private experimentService: ExperimentService,
+    private nzMessageService: NzMessageService
   ) { }
 
   ngOnInit() {
@@ -59,7 +61,7 @@ export class ExperimentComponent implements OnInit {
       'startDate': new FormControl(new Date()),
       'scheduleCycle': new FormControl('Month')
     });
-    this.loadExperiment();
+    this.fetchExperimentList();
   }
 
   handleOk() {
@@ -77,12 +79,25 @@ export class ExperimentComponent implements OnInit {
     }
   }
 
-  loadExperiment() {
+  fetchExperimentList() {
     this.experimentService
       .fetchExperimentList()
       .subscribe((  list ) => {
         this.experimentList = list;
       });
+  }
+  onDeleteExperiment(data: ExperimentInfo) {
+    console.log("id", data.jobId);
+    this.experimentService.deleteExperiment(data.jobId).subscribe(
+      () => {
+        console.log("success");
+        this.nzMessageService.success('Delete user success!');
+        this.fetchExperimentList();
+      }, err => {
+        console.log("failed");
+        this.nzMessageService.success(err.message);
+      }
+    );
   }
 
   // TODO(jasoonn): Filter experiment list

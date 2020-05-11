@@ -20,7 +20,6 @@
 import { ExperimentSpec } from '@submarine/interfaces/experiment-spec';
 
 export class ExperimentInfo {
-  // TODO(pingsutw): change jobId to experimentId
   jobId: string;
   name: string;
   uid: string;

@@ -51,14 +51,14 @@
     <nz-table id="releaseTable" nzBordered #basicTable [nzData]="experimentList" [nzNoResult]="'No data'">
       <thead>
         <tr>
-          <th nzWidth="40px">Experiment Name</th>
-          <th nzWidth="20px">Experiment ID</th>
-          <th nzWidth="40px">Created Time</th>
-          <th nzWidth="40px">Running Time</th>
-          <th nzWidth="40px">Finished Time</th>
-          <th nzWidth="40px">Status</th>
-          <th nzWidth="40px">Progress</th>
-          <th nzWidth="40px">Action</th>
+          <th>Experiment Name</th>
+          <th>Experiment ID</th>
+          <th>Created Time</th>
+          <th>Running Time</th>
+          <th>Finished Time</th>
+          <th>Status</th>
+          <th>Progress</th>
+          <th nzMinWidth="40px">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -71,7 +71,29 @@
           <td>{{ data.status }}</td>
           <td *ngIf="data.status === 'Succeeded'"><nz-progress nzStrokeLinecap="round" [nzPercent]="100"></nz-progress></td>
           <td *ngIf="data.status !== 'Succeeded'"><nz-progress nzStrokeLinecap="round" [nzPercent]="50"></nz-progress></td>
-          <td><button nz-button nzType="link" (click)="startJob(data)" style="padding-left: 2px;padding-right: 5px;">Start</button>|<button nz-button nzType="link" (click)="editJob(data)" style="padding-left: 2px;padding-right: 5px;">Edit</button></td>
+          <td class="td-action" nzRight="0px">
+            <a (click)="startJob(data)">Start</a>
+            <a nz-dropdown [nzDropdownMenu]="more">
+              More
+              <i nz-icon nzType="down"></i>
+            </a>
+            <nz-dropdown-menu #more="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item (click)="editJob(data)">Edit</li>
+                <li
+                  nz-menu-item
+                  nz-popconfirm
+                  nzPlacement="left"
+                  nzTitle="Confirm to delete?"
+                  nzCancelText="Cancel"
+                  nzOkText="Ok"
+                  (nzOnConfirm)="onDeleteExperiment(data)"
+                >
+                  Delete
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </td>
         </tr>
       </tbody>
     </nz-table>
@@ -112,8 +134,8 @@
           <div *ngSwitchCase="1" id="page2">
             <div>
               <label class="form-label"><span class="red-star">* </span> Experiment Spec:</label>
-              <nz-select formControlName="ExperimentSpecs" nzPlaceHolder="Choose" style="width: 350px;margin-top: 30px;">
-                <nz-option *ngFor="let ExperimentSpec of ExperimentSpecs" [nzValue]="ExperimentSpec" [nzLabel]="ExperimentSpec"></nz-option>
+              <nz-select formControlName="experimentSpec" nzPlaceHolder="Choose" style="width: 350px;margin-top: 30px;">
+                <nz-option *ngFor="let experimentSpec of ExperimentSpecs" [nzValue]="experimentSpec" [nzLabel]="experimentSpec"></nz-option>
               </nz-select>
             </div>
             <div>
