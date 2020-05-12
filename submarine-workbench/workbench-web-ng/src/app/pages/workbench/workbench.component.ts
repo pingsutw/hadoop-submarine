@@ -100,8 +100,7 @@ export class WorkbenchComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private nzNotificationService: NzNotificationService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     if (this.authService.isLoggedIn) {

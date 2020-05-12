@@ -22,24 +22,23 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
-  selector: 'app-team',
+  selector: 'submarine-team',
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss']
 })
-export class TeamComponent implements OnInit {  
-  
+export class TeamComponent implements OnInit {
   // Get into a Team or not
   isEntering = false;
 
-  //Get Current Team Data (Now Use Simulated Data) 
+  // Get Current Team Data (Now Use Simulated Data)
   currentTeamName: string;
   currentTeamDepartment: string;
   currentTeamDescription: string;
-  currentTeamProjectNum: Number;
-  currentTeamMemberNum: Number;
+  currentTeamProjectNum: number;
+  currentTeamMemberNum: number;
   currentTeamSettingPermission: boolean;
 
-  // Is Editging Members or not
+  // Is Editing Members or not
   isEditingMember = false;
 
   // For CreateTeamModal
@@ -71,36 +70,32 @@ export class TeamComponent implements OnInit {
       email: 'test@mail.com',
       permission: 'viwer'
     }
-  ]
+  ];
 
   // Simulated Data for Teams
   existTeams = [
     {
-      name: "Submarine",
-      department: "Apache",
-      description: "Something about this team...",
+      name: 'Submarine',
+      department: 'Apache',
+      description: 'Something about this team...',
       projectNum: 3,
       memberNum: 3,
       role: 'admin',
       settingPermission: true
     },
     {
-      name: "Team2",
-      department: "Apple",
-      description: "Something about this team...",
+      name: 'Team2',
+      department: 'Apple',
+      description: 'Something about this team...',
       projectNum: 3,
       memberNum: 3,
       role: 'viwer',
       settingPermission: false
-    },
-  ]
-  constructor(
-    private nzMessageService: NzMessageService, 
-    private notification: NzNotificationService,
-    ) { }
+    }
+  ];
+  constructor(private nzMessageService: NzMessageService, private notification: NzNotificationService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   enter(team) {
     this.isEntering = true;
@@ -117,15 +112,14 @@ export class TeamComponent implements OnInit {
   }
 
   startEditMember() {
-    this.isEditingMember=true;
+    this.isEditingMember = true;
   }
 
   saveEditMember() {
-    this.isEditingMember=false;
+    this.isEditingMember = false;
   }
 
-  cancel(): void {
-  }
+  cancel(): void {}
 
   confirm(): void {
     this.nzMessageService.info('Delete Successful!');
@@ -134,9 +128,8 @@ export class TeamComponent implements OnInit {
   // For CreateTeamModal
   createTeamOk() {
     this.createTeamModalIsVisible = false;
-    console.log("Create Seuccessful!");
+    console.log('Create Seuccessful!');
   }
- 
 
   // For AddUserModal
   startAddUser(): void {
@@ -145,20 +138,16 @@ export class TeamComponent implements OnInit {
 
   // Add Success
   createNotification(type: string): void {
-    this.notification.create(
-      type,
-      'Add Successful!',
-      'Make sure that user check invitation!'
-    );
+    this.notification.create(type, 'Add Successful!', 'Make sure that user check invitation!');
   }
-  
+
   // For AddUserModal
   addUserOk(): void {
     this.addUserIsOkLoading = true;
     setTimeout(() => {
       this.addUserModalIsVisible = false;
       this.addUserIsOkLoading = false;
-      this.createNotification("success");
+      this.createNotification('success');
     }, 1000);
   }
 
@@ -167,17 +156,12 @@ export class TeamComponent implements OnInit {
     this.addUserModalIsVisible = false;
   }
 
-  //TODO(kobe860219) : Get Team From DataBase
-  getTeamDataFromDB() {
+  // TODO(kobe860219) : Get Team From DataBase
+  getTeamDataFromDB() {}
 
-  }
+  // TODO(kobe860219) : Get User From DataBase
+  getUserDataFromDB() {}
 
-  //TODO(kobe860219) : Get User From DataBase
-  getUserDataFromDB() {
-  }
-
-  //TODO(kobe860219) : Update Data to DataBase
-  updateTeamData() {
-
-  }
+  // TODO(kobe860219) : Update Data to DataBase
+  updateTeamData() {}
 }

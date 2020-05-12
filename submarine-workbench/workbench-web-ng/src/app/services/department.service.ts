@@ -19,21 +19,19 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ValidationErrors } from '@angular/forms';
 import { Rest } from '@submarine/interfaces';
+import { SysDeptItem } from '@submarine/interfaces/sys-dept-item';
 import { SysDeptSelect } from '@submarine/interfaces/sys-dept-select';
 import { of, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { BaseApiService } from './base-api.service';
-import { SysDeptItem } from '@submarine/interfaces/sys-dept-item';
-import { ValidationErrors } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DepartmentService {
-
-  constructor(private baseApi: BaseApiService, private httpClient: HttpClient) {
-  }
+  constructor(private baseApi: BaseApiService, private httpClient: HttpClient) {}
 
   fetchSysDeptSelect(): Observable<SysDeptSelect[]> {
     const apiUrl = this.baseApi.getRestApi('/sys/dept/queryIdTree');
@@ -48,7 +46,7 @@ export class DepartmentService {
     );
   }
 
-  fetchSysDeptList() : Observable<SysDeptItem[]> {
+  fetchSysDeptList(): Observable<SysDeptItem[]> {
     const apiUrl = this.baseApi.getRestApi('/sys/dept/tree');
     return this.httpClient.get<Rest<any>>(apiUrl).pipe(
       switchMap(res => {
@@ -62,21 +60,24 @@ export class DepartmentService {
     );
   }
 
-  codeCheck(codeParams): Promise<ValidationErrors|null> {
+  codeCheck(codeParams): Promise<ValidationErrors | null> {
     const promise = new Promise((resolve, reject) => {
       const apiUrl = this.baseApi.getRestApi('/sys/duplicateCheck');
-      this.httpClient.get<any>(apiUrl,{
-        params: codeParams
-      }).toPromise()
-      .then((res: any) => {
-          console.log(res)
-          resolve(res.success);
-        },
-        err => {
-          console.log(err);
-          reject(err);
-        }
-      );
+      this.httpClient
+        .get<any>(apiUrl, {
+          params: codeParams
+        })
+        .toPromise()
+        .then(
+          (res: any) => {
+            console.log(res);
+            resolve(res.success);
+          },
+          err => {
+            console.log(err);
+            reject(err);
+          }
+        );
     });
     return promise;
   }
@@ -85,7 +86,7 @@ export class DepartmentService {
     const apiUrl = this.baseApi.getRestApi('/sys/dept/add');
     return this.httpClient.post<Rest<SysDeptItem>>(apiUrl, params).pipe(
       switchMap(res => {
-        console.log(res)
+        console.log(res);
         if (res.success) {
           return of(res.result);
         } else {
@@ -107,5 +108,4 @@ export class DepartmentService {
       })
     );
   }
-
 }
