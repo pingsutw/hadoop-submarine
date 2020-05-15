@@ -1,12 +1,12 @@
 {
     "input": {
-        "train_data": "hdfs://localhost:9000/user/yarn/input/dev.libsvm",
-        "val_data": "hdfs://localhost:9000/user/yarn/input/dev.libsvm",
-        "test_data": "hdfs://localhost:9000/user/yarn/input/dev.libsvm",
+        "train_data": "../data/dev.libsvm",
+        "valid_data": "../data/dev.libsvm",
+        "test_data": "../data/dev.libsvm",
         "type": "libsvm"
     },
     "output": {
-        "save_model_dir": "hdfs://localhost:9000/user/yarn/output",
+        "save_model_dir": "./output",
         "metric": "roc_auc_score"
     },
     "training": {
@@ -16,23 +16,23 @@
         "num_threads": 0,
         "num_gpus": 0,
         "seed": 42,
-        "mode": "distributed", 
+        "mode": "distributed",
         "backend": "gloo"
     },
     "model": {
-        "name": "ctr.deepfm", 
+        "name": "ctr.deepfm",
         "kwargs": {
             "field_dims": [15, 52, 30, 19, 111, 51, 26, 19, 53, 5, 13, 8, 23, 21, 77, 25, 39, 11, 8, 61, 15, 3, 34, 75, 30, 79, 11, 85, 37, 10, 94, 19, 5, 32, 6, 12, 42, 18, 23],
             "out_features": 1,
-            "embedding_dim": 16, 
+            "embedding_dim": 16,
             "hidden_units": [16, 16],
             "dropout_rates": [0.2, 0.2]
         }
     },
     "criterion": {
-        "name": "BCEWithLogitsLoss", 
+        "name": "BCEWithLogitsLoss",
         "kwargs": {}
-    }, 
+    },
     "optimizer": {
         "name": "adam",
         "kwargs": {
