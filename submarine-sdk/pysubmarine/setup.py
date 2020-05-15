@@ -30,7 +30,9 @@ setup(
         'sqlparse',
         'pymysql',
         'tensorflow>=1.14.0,<2.0.0',
-        'requests'
+        'requests',
+        'pyarrow==0.17.0',
+        'torch',
     ],
     classifiers=[
         'Intended Audience :: Developers',
