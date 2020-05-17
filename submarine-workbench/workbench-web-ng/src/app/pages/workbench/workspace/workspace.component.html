@@ -42,11 +42,11 @@
     </div>
 
     <div [ngSwitch]="currentState">
-      <app-project *ngSwitchCase="'project'"></app-project>
-      <app-release *ngSwitchCase="'release'"></app-release>
-      <app-training *ngSwitchCase="'training'"></app-training>
-      <app-team *ngSwitchCase="'team'"></app-team>
-      <app-shared *ngSwitchCase="'shared'"></app-shared>
+      <submarine-project *ngSwitchCase="'project'"></submarine-project>
+      <submarine-release *ngSwitchCase="'release'"></submarine-release>
+      <submarine-training *ngSwitchCase="'training'"></submarine-training>
+      <submarine-team *ngSwitchCase="'team'"></submarine-team>
+      <submarine-shared *ngSwitchCase="'shared'"></submarine-shared>
     </div>
   </nz-layout>
 </nz-layout>
