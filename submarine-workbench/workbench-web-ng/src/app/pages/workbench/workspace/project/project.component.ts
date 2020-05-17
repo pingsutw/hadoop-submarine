@@ -17,10 +17,10 @@
  * under the License.
  */
 
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-project',
+  selector: 'submarine-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
@@ -30,30 +30,58 @@ export class ProjectComponent implements OnInit {
 
   @ViewChild('inputElement', { static: false }) inputElement: ElementRef;
 
-  constructor() { }
+  constructor() {}
 
-  //TODO(jasoonn): get projects data from server
+  // TODO(jasoonn): get projects data from server
   ngOnInit() {
     this.existProjects.push({
-      projectName: 'projectName0', description: 'description', tags: ['12', 'Tag 2'], inputTagVisibility: false, projectInputTag: '', starNum:0, likeNum:0, msgNum:0
+      projectName: 'projectName0',
+      description: 'description',
+      tags: ['12', 'Tag 2'],
+      inputTagVisibility: false,
+      projectInputTag: '',
+      starNum: 0,
+      likeNum: 0,
+      msgNum: 0
     });
     this.existProjects.push({
-      projectName: 'projectName1', description: 'description', tags: ['Unremovable', 'Tag 2'], inputTagVisibility: false, projectInputTag: '', starNum:0, likeNum:0, msgNum:0
+      projectName: 'projectName1',
+      description: 'description',
+      tags: ['Unremovable', 'Tag 2'],
+      inputTagVisibility: false,
+      projectInputTag: '',
+      starNum: 0,
+      likeNum: 0,
+      msgNum: 0
     });
     this.existProjects.push({
-      projectName: 'projectName1', description: 'description', tags: ['Unremovable', 'Tag 2', 'Tag 3'], inputTagVisibility: false, projectInputTag: '', starNum:0, likeNum:0, msgNum:0
+      projectName: 'projectName1',
+      description: 'description',
+      tags: ['Unremovable', 'Tag 2', 'Tag 3'],
+      inputTagVisibility: false,
+      projectInputTag: '',
+      starNum: 0,
+      likeNum: 0,
+      msgNum: 0
     });
     this.existProjects.push({
-      projectName: 'projectName1', description: 'description', tags: ['Unremovable', 'Tag 2', 'Tag 3'], inputTagVisibility: false, projectInputTag: '', starNum:0, likeNum:0, msgNum:0
-    })
+      projectName: 'projectName1',
+      description: 'description',
+      tags: ['Unremovable', 'Tag 2', 'Tag 3'],
+      inputTagVisibility: false,
+      projectInputTag: '',
+      starNum: 0,
+      likeNum: 0,
+      msgNum: 0
+    });
   }
-  //TODO(jasoonn): Update tag in server
-  handleCloseTag(project, tag){
-    project.tags = project.tags.filter(itag => itag!==tag);
+  // TODO(jasoonn): Update tag in server
+  handleCloseTag(project, tag) {
+    project.tags = project.tags.filter((itag) => itag !== tag);
     console.log(project);
     console.log(tag);
   }
-  //TODO(jasoonn): update tag in server
+  // TODO(jasoonn): update tag in server
   handleInputConfirm(project): void {
     if (project.projectInputTag && project.tags.indexOf(project.projectInputTag) === -1) {
       project.tags = [...project.tags, project.projectInputTag];

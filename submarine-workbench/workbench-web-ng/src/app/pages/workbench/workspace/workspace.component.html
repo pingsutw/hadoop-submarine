@@ -25,29 +25,22 @@
         </nz-breadcrumb-item>
         <nz-breadcrumb-item>Workspace</nz-breadcrumb-item>
       </nz-breadcrumb>
-      <br/>
+      <br />
       <h2>Project</h2>
-      <nz-content>You can click on the project tree directory on the left and the project file list will be displayed on the right.</nz-content>
-      <br/>
+      <nz-content>
+        You can click on the project tree directory on the left and the project file list will be displayed on the
+        right.
+      </nz-content>
+      <br />
       <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="switchState('project')">
-          Project({{basicInfo.project}}) 
-        </li>
-        <li nz-menu-item (click)="switchState('release')">
-          Release({{basicInfo.release}})
-        </li>
-        <li nz-menu-item (click)="switchState('training')">
-          Training({{basicInfo.training}})
-        </li>
-        <li nz-menu-item (click)="switchState('team')">
-          Team({{basicInfo.team}})
-        </li>
-        <li nz-menu-item (click)="switchState('shared')">
-          Shared({{basicInfo.shared}})
-        </li>
+        <li nz-menu-item nzSelected (click)="switchState('project')">Project({{ basicInfo.project }})</li>
+        <li nz-menu-item (click)="switchState('release')">Release({{ basicInfo.release }})</li>
+        <li nz-menu-item (click)="switchState('training')">Training({{ basicInfo.training }})</li>
+        <li nz-menu-item (click)="switchState('team')">Team({{ basicInfo.team }})</li>
+        <li nz-menu-item (click)="switchState('shared')">Shared({{ basicInfo.shared }})</li>
       </ul>
     </div>
-    
+
     <div [ngSwitch]="currentState">
       <app-project *ngSwitchCase="'project'"></app-project>
       <app-release *ngSwitchCase="'release'"></app-release>
