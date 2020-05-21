@@ -21,6 +21,6 @@ cd "$FWDIR"
 cd ..
 
 pycodestyle --max-line-length=100  -- submarine tests
-pylint --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests
+pylint --ignore job --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests
 
 set +ex

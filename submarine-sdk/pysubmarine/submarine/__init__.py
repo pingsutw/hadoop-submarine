@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-from submarine.job import ApiClient, JobLibrarySpec, JobSpec, JobTaskSpec, ApiClient,\
+from submarine.job import ApiClient, JobLibrarySpec, JobSpec, JobTaskSpec,\
     Configuration, JobsApi
 
 import submarine.tracking.fluent
