@@ -14,22 +14,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -o errexit
-set -o nounset
-set -o pipefail
-
 FWDIR="$(cd "$(dirname "$0")"; pwd)"
 cd "$FWDIR"
 
+SUBMARINE_PROJECT_PATH="$FWDIR/../.."
 SWAGGER_JAR_URL="https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.3.1/openapi-generator-cli-4.3.1.jar"
 SWAGGER_CODEGEN_JAR="openapi-generator-cli.jar"
 SWAGGER_CODEGEN_CONF="swagger_config.json"
-SWAGGER_CODEGEN_FILE="openapi.yaml"
+SWAGGER_CODEGEN_FILE="openapi.json"
 SDK_OUTPUT_PATH="sdk/python"
 # SDK_OUTPUT_PATH="../../submarine-sdk/pysubmarine/submarine"
 
-echo "Generating swagger file ..."
-# TODO: generate openapi.yaml without starting submarine server
+submarine_dist_exists=$(find -L "${SUBMARINE_PROJECT_PATH}/submarine-dist/target" -name "submarine-dist-*.tar.gz")
+# Build source code if the package doesn't exist.
+if [[ -z "${submarine_dist_exists}" ]]; then
+  cd "${SUBMARINE_PROJECT_PATH}"
+  mvn clean package -DskipTests
+fi
+
+echo "Generating openAPI 3.0 definition file ..."
+# TODO(pingsutw): generate openapi.yaml without starting submarine server
+bash ${SUBMARINE_PROJECT_PATH}/submarine-dist/target//submarine-dist-*/submarine-dist-*/bin/submarine-daemon.sh start getMysqlJar
+sleep 5
+rm openapi.json
+wget http://localhost:8080/v1/openapi.json
+bash ${SUBMARINE_PROJECT_PATH}/submarine-dist/target//submarine-dist-*/submarine-dist-*/bin/submarine-daemon.sh stop
 
 openapi_generator_cli_exists=$(find -L "${FWDIR}" -name "openapi-generator-cli*")
 if [[ -z "${openapi_generator_cli_exists}" ]]; then
@@ -65,3 +74,6 @@ for filename in $(find ${SDK_OUTPUT_PATH}/submarine/job -type f); do
 '\
   "$filename"
 done
+
+echo "Move Experiment API to pysubmarine"
+cp -r sdk/python/submarine/job ${SUBMARINE_PROJECT_PATH}/submarine-sdk/pysubmarine/submarine/
