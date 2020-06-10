@@ -1,8 +1,8 @@
 {
   "input": {
-    "train_data": ["../data/tr.libsvm"],
-    "valid_data": ["../data/va.libsvm"],
-    "test_data": ["../data/te.libsvm"],
+    "train_data": ["/root/ctr/benchmark_data/8M/tr.libsvm"],
+    "valid_data": ["/root/ctr/benchmark_data/8M/va.libsvm"],
+    "test_data": ["/root/ctr/benchmark_data/8M/te.libsvm"],
     "type": "libsvm"
   },
   "output": {
@@ -27,7 +27,7 @@
     "mode": "local"
   },
   "resource": {
-    "num_cpu": 4,
+    "num_cpu": 80,
     "num_gpu": 0,
     "num_thread": 0
   }

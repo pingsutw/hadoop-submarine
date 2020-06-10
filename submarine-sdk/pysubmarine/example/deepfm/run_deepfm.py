@@ -12,6 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from comet_ml import Experiment
+experiment = Experiment(api_key="ej6XeyCVjqHM8uLDNj5VGrzjP",
+                       project_name="benchmark", workspace="pingsutw")
 
 from submarine.ml.model import DeepFM
 import argparse
@@ -25,10 +28,15 @@ if __name__ == '__main__':
     json_path = args.conf
     task_type = args.task_type
 
+    experiment.add_tag("8M")
+    experiment.add_tag("pysubmarine-deepfm")
+
+
     model = DeepFM(json_path=json_path)
 
     if task_type == 'train':
         model.train()
-    if task_type == 'evaluate':
         result = model.evaluate()
         print("Model metrics : ", result)
+        experiment.log_metric("AUC", result['auc'])
+        experiment.log_metric("LogLoss", result['loss'])
