@@ -28,7 +28,7 @@ if __name__ == '__main__':
     json_path = args.conf
     task_type = args.task_type
 
-    experiment.add_tag("8M")
+    experiment.add_tag("45M")
     experiment.add_tag("pysubmarine-deepfm")
 
 
