@@ -13,17 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pytest
+import unittest
 import submarine
 from os import environ
 from submarine.store.database.models import SqlMetric, SqlParam
 from submarine.tracking import utils
 from submarine.store.database import models
 
-import unittest
-
 JOB_NAME = "application_123456789"
 
 
+@pytest.mark.e2e
 class TestTracking(unittest.TestCase):
     def setUp(self):
         environ["SUBMARINE_JOB_NAME"] = JOB_NAME
