@@ -14,25 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -ex
-
-FWDIR="$(cd "$(dirname "$0")"; pwd)"
-cd "$FWDIR"
-cd ..
-
-pycodestyle --max-line-length=100  -- submarine tests
-pylint --ignore job --msg-template="{path} ({line},{column}): [{msg_id} {symbol}] {msg}" --rcfile=pylintrc -- submarine tests
-./github-actions/auto-format.sh
-
-GIT_STATUS="$(git status --porcelain)"
-if [ "$GIT_STATUS" ]; then
-	echo "Code is not format by yapf. Please run ./github-actions/auto-format.sh"
-	echo "Git status is"
-	echo "------------------------------------------------------------------"
-	echo "$GIT_STATUS"
-	exit 1
-else
-	echo "Test successful"
-fi
-
-set +ex
+# Autoformat code
+yapf -i submarine/**/*.py tests/**/*.py
+# Sort imports
+isort submarine/**/*.py tests/**/*.py

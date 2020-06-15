@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import submarine.tracking as tracking
 import submarine.tracking.fluent
 from submarine.job import (ApiClient, Configuration, JobLibrarySpec, JobsApi,
