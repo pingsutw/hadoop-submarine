@@ -26,7 +26,7 @@ pylint --ignore job --msg-template="{path} ({line},{column}): [{msg_id} {symbol}
 
 GIT_STATUS="$(git status --porcelain)"
 if [ "$GIT_STATUS" ]; then
-	echo "Code is not format by yapf. Please run ./github-actions/auto-format.sh"
+	echo "Code is not formatted by yapf. Please run ./github-actions/auto-format.sh"
 	echo "Git status is"
 	echo "------------------------------------------------------------------"
 	echo "$GIT_STATUS"
