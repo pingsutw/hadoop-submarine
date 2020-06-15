@@ -20,7 +20,6 @@ class Param(_SubmarineObject):
     """
     Parameter object.
     """
-
     def __init__(self, key, value, worker_index):
         self._key = key
         self._value = value

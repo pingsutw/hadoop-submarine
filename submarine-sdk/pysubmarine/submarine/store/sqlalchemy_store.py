@@ -14,15 +14,15 @@
 # limitations under the License.
 
 import logging
-from contextlib import contextmanager
 import math
+from contextlib import contextmanager
+
 import sqlalchemy
 
 from submarine.exceptions import SubmarineException
-from submarine.utils import extract_db_type_from_uri
-from submarine.store.database.models import Base, SqlMetric, SqlParam
 from submarine.store.abstract_store import AbstractStore
-
+from submarine.store.database.models import Base, SqlMetric, SqlParam
+from submarine.utils import extract_db_type_from_uri
 
 _logger = logging.getLogger(__name__)
 
@@ -41,7 +41,6 @@ class SqlAlchemyStore(AbstractStore):
     :py:class:`submarine.store.database.models.SqlMetric`, and
     :py:class:`submarine.store.database.models.SqlParam`.
     """
-
     def __init__(self, db_uri):
         """
         Create a database backed store.
@@ -64,7 +63,8 @@ class SqlAlchemyStore(AbstractStore):
             SqlAlchemyStore._initialize_tables(self.engine)
         Base.metadata.bind = self.engine
         SessionMaker = sqlalchemy.orm.sessionmaker(bind=self.engine)
-        self.ManagedSessionMaker = self._get_managed_session_maker(SessionMaker)
+        self.ManagedSessionMaker = self._get_managed_session_maker(
+            SessionMaker)
         # Todo Need to check database's schema is not out of date
         # SqlAlchemyStore._verify_schema(self.engine)
 
@@ -136,18 +136,26 @@ class SqlAlchemyStore(AbstractStore):
             value = float(metric.value)
         with self.ManagedSessionMaker() as session:
             try:
-                self._get_or_create(model=SqlMetric, job_name=job_name, key=metric.key,
-                                    value=value, worker_index=metric.worker_index,
-                                    timestamp=metric.timestamp, step=metric.step,
-                                    session=session, is_nan=is_nan)
+                self._get_or_create(model=SqlMetric,
+                                    job_name=job_name,
+                                    key=metric.key,
+                                    value=value,
+                                    worker_index=metric.worker_index,
+                                    timestamp=metric.timestamp,
+                                    step=metric.step,
+                                    session=session,
+                                    is_nan=is_nan)
             except sqlalchemy.exc.IntegrityError:
                 session.rollback()
 
     def log_param(self, job_name, param):
         with self.ManagedSessionMaker() as session:
             try:
-                self._get_or_create(model=SqlParam, job_name=job_name, session=session,
-                                    key=param.key, value=param.value,
+                self._get_or_create(model=SqlParam,
+                                    job_name=job_name,
+                                    session=session,
+                                    key=param.key,
+                                    value=param.value,
                                     worker_index=param.worker_index)
                 session.commit()
             except sqlalchemy.exc.IntegrityError:

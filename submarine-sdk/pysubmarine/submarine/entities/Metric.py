@@ -20,7 +20,6 @@ class Metric(_SubmarineObject):
     """
     Metric object.
     """
-
     def __init__(self, key, value, worker_index, timestamp, step):
         self._key = key
         self._value = value

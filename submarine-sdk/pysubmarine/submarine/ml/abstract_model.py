@@ -28,7 +28,7 @@ class AbstractModel:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def __init__(self,):
+    def __init__(self, ):
         pass
 
     @abstractmethod

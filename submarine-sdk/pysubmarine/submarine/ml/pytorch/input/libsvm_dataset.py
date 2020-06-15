@@ -13,13 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from submarine.utils.fileio import read_file
+import pandas as pd
 
 import torch
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
+from submarine.utils.fileio import read_file
+from torch.utils.data import DataLoader, Dataset
 from torch.utils.data.distributed import DistributedSampler
-import pandas as pd
 
 
 class LIBSVMDataset(Dataset):
@@ -52,21 +51,18 @@ class LIBSVMDataset(Dataset):
     def collate_fn(self, batch):
         data, label = tuple(zip(*batch))
         _, feat_val = tuple(zip(*data))
-        return (
-            torch.stack(feat_val, dim=0).type(torch.long),
-            torch.as_tensor(label, dtype=torch.float32).unsqueeze(dim=-1)
-        )
+        return (torch.stack(feat_val, dim=0).type(torch.long),
+                torch.as_tensor(label, dtype=torch.float32).unsqueeze(dim=-1))
 
 
 def libsvm_input_fn(filepath, batch_size=256, num_threads=1, **kwargs):
     def _input_fn():
         dataset = LIBSVMDataset(filepath)
         sampler = DistributedSampler(dataset)
-        return DataLoader(
-            dataset=dataset,
-            batch_size=batch_size,
-            sampler=sampler,
-            num_workers=num_threads,
-            collate_fn=dataset.collate_fn
-        )
+        return DataLoader(dataset=dataset,
+                          batch_size=batch_size,
+                          sampler=sampler,
+                          num_workers=num_threads,
+                          collate_fn=dataset.collate_fn)
+
     return _input_fn

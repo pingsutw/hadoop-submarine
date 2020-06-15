@@ -14,7 +14,6 @@
 # limitations under the License.
 
 # coding: utf-8
-
 """
     Submarine Experiment API
 
@@ -31,9 +30,9 @@ import copy
 import logging
 import multiprocessing
 import sys
-import urllib3
 
 import six
+import urllib3
 from six.moves import http_client as httplib
 
 
@@ -57,7 +56,6 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
     Ref: https://github.com/swagger-api/swagger-codegen
     Do not edit the class manually.
     """
-
     def __init__(self):
         """Constructor"""
         # Default Base url
@@ -234,17 +232,15 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
 
         :return: The token for basic HTTP authentication.
         """
-        return urllib3.util.make_headers(
-            basic_auth=self.username + ':' + self.password
-        ).get('authorization')
+        return urllib3.util.make_headers(basic_auth=self.username + ':' +
+                                         self.password).get('authorization')
 
     def auth_settings(self):
         """Gets Auth Settings dict for api client.
 
         :return: The Auth Settings information dict.
         """
-        return {
-        }
+        return {}
 
     def to_debug_report(self):
         """Gets the essential information for debugging.

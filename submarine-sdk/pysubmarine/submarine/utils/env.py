@@ -13,9 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import json
 import copy
+import json
+import os
 from collections import Mapping
 
 
@@ -78,8 +78,5 @@ def get_from_registry(key, registry):
     if key in registry:
         return registry[key]
     else:
-        raise ValueError(
-            'Key {} not supported, available options: {}'.format(
-                key, registry.keys()
-            )
-        )
+        raise ValueError('Key {} not supported, available options: {}'.format(
+            key, registry.keys()))
