@@ -70,7 +70,9 @@
               style="width: 80%; margin-top: 10px; margin-left: 20px;"
               [nzAddOnAfter]="suffixIconButton"
             >
-              <input type="text" nz-input placeholder="input search text" [(ngModel)]="searchValue" />
+              <label>
+                <input type="text" nz-input placeholder="input search text" [(ngModel)]="searchValue" />
+              </label>
             </nz-input-group>
             <ng-template #suffixIconButton>
               <button nz-button nzSearch (click)="listSort()"><i nz-icon nzType="search"></i></button>
@@ -102,7 +104,9 @@
                           {{ data.name }}
                         </ng-container>
                         <ng-template #nameInputTpl>
-                          <input type="text" nz-input [(ngModel)]="data.nameTmp" />
+                          <label>
+                            <input type="text" nz-input [(ngModel)]="data.nameTmp" />
+                          </label>
                         </ng-template>
                       </td>
                       <td>
@@ -110,7 +114,9 @@
                           {{ data.type }}
                         </ng-container>
                         <ng-template #typeInputTpl>
-                          <input type="text" nz-input [(ngModel)]="data.typeTmp" />
+                          <label>
+                            <input type="text" nz-input [(ngModel)]="data.typeTmp" />
+                          </label>
                         </ng-template>
                       </td>
                       <td>
@@ -118,7 +124,9 @@
                           {{ data.comment }}
                         </ng-container>
                         <ng-template #cmtInputTpl>
-                          <input type="text" nz-input [(ngModel)]="data.commentTmp" />
+                          <label>
+                            <input type="text" nz-input [(ngModel)]="data.commentTmp" />
+                          </label>
                         </ng-template>
                       </td>
                       <td>
@@ -215,7 +223,9 @@
                 <div>
                   <label class="form-label">Path:</label>
                   <nz-input-group nzAddOnBefore="file://" style="width: 400px; margin-top: 25px;">
-                    <input type="text" nz-input class="form-control" formControlName="path" />
+                    <label>
+                      <input type="text" nz-input class="form-control" formControlName="path" />
+                    </label>
                   </nz-input-group>
                 </div>
                 <div style="margin-left: 38%;" *ngIf="createTable.get('dataSource').value == 'upload'">
@@ -260,13 +270,15 @@
                     <span class="red-star">*</span>
                     Column Delimiter:
                   </label>
-                  <input
-                    type="text"
-                    style="width: 50px; margin-top: 25px;"
-                    nz-input
-                    class="form-control"
-                    formControlName="columnDelimiter"
-                  />
+                  <label>
+                    <input
+                      type="text"
+                      style="width: 50px; margin-top: 25px;"
+                      nz-input
+                      class="form-control"
+                      formControlName="columnDelimiter"
+                    />
+                  </label>
                   <label nz-checkbox style="margin-left: 20px;" class="form-control" formControlName="header">
                     First row is header
                   </label>
@@ -308,7 +320,7 @@
                   <span class="red-star">*</span>
                   Table Name:
                 </label>
-                <input
+                <label for="tableName"></label><input
                   id="tableName"
                   type="text"
                   style="width: 200px; margin-top: 25px;"
@@ -362,13 +374,15 @@
                         {{ data.type }}
                       </ng-container>
                       <ng-template #typeCreateInputTpl>
-                        <input
-                          style="width: 120px;"
-                          type="text"
-                          nz-input
-                          [(ngModel)]="data.typeTmp"
-                          [ngModelOptions]="{ standalone: true }"
-                        />
+                        <label>
+                          <input
+                            style="width: 120px;"
+                            type="text"
+                            nz-input
+                            [(ngModel)]="data.typeTmp"
+                            [ngModelOptions]="{ standalone: true }"
+                          />
+                        </label>
                       </ng-template>
                     </td>
                     <td>
