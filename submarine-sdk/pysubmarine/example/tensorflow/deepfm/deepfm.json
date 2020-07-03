@@ -12,7 +12,7 @@
   "training": {
     "batch_size" : 512,
     "field_size": 39,
-    "num_epochs": 10,
+    "num_epochs": 50,
     "feature_size": 117581,
     "embedding_size": 256,
     "learning_rate": 0.0005,

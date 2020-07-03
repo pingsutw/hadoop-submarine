@@ -16,6 +16,8 @@
 import submarine.tracking as tracking
 import submarine.tracking.fluent
 from submarine.experiment.api.experiment_client import ExperimentClient
+from submarine.tracking.autologger import autolog
+
 
 log_param = submarine.tracking.fluent.log_param
 log_metric = submarine.tracking.fluent.log_metric
@@ -26,5 +28,6 @@ __all__ = ["log_metric",
            "log_param",
            "set_tracking_uri",
            "get_tracking_uri",
-           "ExperimentClient"
+           "ExperimentClient",
+           "autolog"
            ]
