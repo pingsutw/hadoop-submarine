@@ -8,7 +8,6 @@ import org.apache.submarine.server.api.environment.Environment;
 import org.apache.submarine.server.api.spec.EnvironmentSpec;
 import org.apache.submarine.server.api.spec.KernelSpec;
 import org.apache.submarine.server.response.JsonResponse;
-import org.apache.submarine.server.workbench.database.entity.SysDict;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
