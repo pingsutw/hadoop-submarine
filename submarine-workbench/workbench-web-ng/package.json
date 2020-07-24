@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "autoformat": "prettier --write --trailing-comma none --single-quote 'src/**/*.{js,json,ts,html}'",
-    "webdriver": "webdriver-manager update --ignore_ssl = true"
+    "webdriver": "webdriver-manager update --versions.chrome=85.0.4183.38 --ignore_ssl = true"
   },
   "private": true,
   "dependencies": {
