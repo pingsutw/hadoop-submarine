@@ -254,7 +254,11 @@ matrix:
       before_script:
         npm install
       addons:
-        chrome: stable
+        apt:
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
         firefox: latest
       script:
         - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
