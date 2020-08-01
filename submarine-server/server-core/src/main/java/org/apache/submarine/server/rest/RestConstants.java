@@ -23,6 +23,7 @@ public class RestConstants {
   public static final String V1 = "v1";
   public static final String EXPERIMENT = "experiment";
   public static final String ID = "id";
+  public static final String JOB_ID = "JOB_ID";
   public static final String PING = "ping";
   public static final String MEDIA_TYPE_YAML = "application/yaml";
   public static final String CHARSET_UTF8 = "charset=utf-8";
@@ -36,11 +37,11 @@ public class RestConstants {
   public static final String NODE = "node";
 
   public static final String LOGS = "logs";
-  
+
   /**
    * Environment
    */
   public static final String ENVIRONMENT = "environment";
-  
+
   public static final String ENVIRONMENT_ID = "id";
 }
