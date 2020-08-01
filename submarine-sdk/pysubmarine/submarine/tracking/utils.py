@@ -32,7 +32,8 @@ _CLUSTER_SPEC = "CLUSTER_SPEC"
 _TASK_INDEX = "TASK_INDEX"
 _JOB_NAME = "JOB_NAME"
 _RANK = "RANK"
-_TASK = "TASK"
+_TASK = "task"
+_TYPE = "type"
 
 # Extra environment variables which take precedence for setting the basic/bearer
 # auth on http requests.
@@ -98,7 +99,7 @@ def get_worker_index():
     if env.get_env(_TF_CONFIG) is not None:
         tf_config = json.loads(os.environ.get(_TF_CONFIG))
         task_config = tf_config.get(_TASK)
-        task_type = task_config.get(_JOB_NAME)
+        task_type = task_config.get(_TYPE)
         task_index = task_config.get(_TASK_INDEX)
         worker_index = task_type + '-' + str(task_index)
     elif env.get_env(_CLUSTER_SPEC) is not None:
