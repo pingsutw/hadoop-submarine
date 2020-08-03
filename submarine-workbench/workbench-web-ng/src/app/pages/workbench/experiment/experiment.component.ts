@@ -59,12 +59,19 @@ export class ExperimentComponent implements OnInit {
   PYTORCH_SPECNAMES = ['Master', 'Worker'];
   MEMORY_UNITS = ['M', 'G'];
 
-  // About env page
+  // About environment page
   currentEnvPage = 1;
   PAGESIZE = 5;
 
   // About spec
   currentSpecPage = 1;
+
+  statusColor: { [key: string]: string } = {
+    Accepted: 'gold',
+    Created: 'white',
+    Running: 'green',
+    Succeeded: 'blue'
+  };
 
   constructor(
     private experimentService: ExperimentService,

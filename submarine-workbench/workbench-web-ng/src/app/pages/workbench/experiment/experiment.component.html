@@ -69,9 +69,9 @@
           New Experiment
         </button>
         <button
+          id="deleteButton"
           nz-button
           nzType="primary"
-          style="margin-bottom: 15px; margin-top: 15px;"
           nz-popconfirm
           nzTitle="Confirm to delete?"
           nzCancelText="Cancel"
@@ -115,7 +115,9 @@
                 {{ data.experimentId }}
               </a>
             </td>
-            <td>{{ data.status }}</td>
+            <td>
+              <nz-tag [nzColor]="statusColor[data.status]">{{ data.status }}</nz-tag>
+            </td>
             <td>{{ data.finishedTime | date: 'M/d/yyyy, h:mm a' }}</td>
             <td>{{ data.createdTime | date: 'M/d/yyyy, h:mm a' }}</td>
             <td>{{ data.runningTime | date: 'M/d/yyyy, h:mm a' }}</td>

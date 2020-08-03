@@ -41,7 +41,7 @@ export class ChartsComponent implements OnInit {
   xAxisLabel: string = 'Time (s)';
   yAxisLabels = [];
   timeline: boolean = false;
-  colorScheme = ['cool', 'fire', 'flame', 'air', 'forest', 'neons', 'ocean'];
+  colorScheme = ['cool', 'fire', 'flame', 'night', 'forest', 'nightLights', 'ocean'];
   constructor() {}
 
   onSelect(data): void {

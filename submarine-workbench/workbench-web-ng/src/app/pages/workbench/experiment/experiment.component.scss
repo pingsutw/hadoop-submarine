@@ -17,11 +17,11 @@
  * under the License.
  */
 
- #experimentOuter{
+  #experimentOuter{
     background-color: white;
     padding-left: 30px;
     padding-top: 20px;
- }
+  }
 
  #experimentData{
     margin-top: 16px;
@@ -30,6 +30,11 @@
     background-color:white;
     padding-left: 10px;
     padding-right: 10px;
+ }
+
+ #deleteButton{
+    margin-bottom: 15px;
+    margin-top: 15px;
  }
 
  input.ng-invalid.ng-touched {
