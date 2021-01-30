@@ -23,7 +23,9 @@ import java.io.IOException;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.submarine.server.AbstractSubmarineServerTest;
 import org.apache.submarine.server.api.environment.Environment;
 import org.apache.submarine.server.api.environment.EnvironmentId;
@@ -31,72 +33,95 @@ import org.apache.submarine.server.gson.EnvironmentIdDeserializer;
 import org.apache.submarine.server.gson.EnvironmentIdSerializer;
 import org.apache.submarine.server.response.JsonResponse;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.After;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @SuppressWarnings("rawtypes")
 public class EnvironmentManagerRestApiIT extends AbstractSubmarineServerTest {
+  private final Gson gson = new GsonBuilder()
+          .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
+          .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
+          .create();
 
   @BeforeClass
   public static void startUp() throws Exception {
     Assert.assertTrue(checkIfServerIsRunning());
   }
 
-  @Test
+  @Before
   public void testCreateEnvironment() throws Exception {
+    LOG.info("Test create Environment using Environment REST API");
+
     String body = loadContent("environment/test_env_1.json");
-    run(body, "application/json");
-    deleteEnvironment();
+    PostMethod postMethod = httpPost(ENV_PATH, body, "application/json");
+
+    JsonResponse jsonResponse = getJsonResponse(postMethod, gson);
+    Environment env =
+            gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
+    Assert.assertNotNull(env.getEnvironmentSpec().getName());
+    Assert.assertNotNull(env.getEnvironmentSpec());
   }
 
   @Test
   public void testGetEnvironment() throws Exception {
+    LOG.info("Test get Environment using Environment REST API");
 
-    String body = loadContent("environment/test_env_1.json");
-    run(body, "application/json");
-
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
-        .create();
     GetMethod getMethod = httpGet(ENV_PATH + "/" + ENV_NAME);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        getMethod.getStatusCode());
-
-    String json = getMethod.getResponseBodyAsString();
-    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        jsonResponse.getCode());
+    JsonResponse jsonResponse = getJsonResponse(getMethod, gson);
 
     Environment getEnvironment =
         gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
     Assert.assertEquals(ENV_NAME, getEnvironment.getEnvironmentSpec().getName());
-    deleteEnvironment();
   }
 
 
   @Test
-  public void testUpdateEnvironment() throws IOException {
+  public void testUpdateEnvironment() throws Exception {
+    LOG.info("Test update Environment using Environment REST API");
 
-  }
+    String body = loadContent("environment/test_env_2.json");
+    String json = httpPatch(ENV_PATH + "/" + ENV_NAME, body, "application/json");
 
-  @Test
-  public void testDeleteEnvironment() throws Exception {
-    String body = loadContent("environment/test_env_1.json");
-    run(body, "application/json");
-    deleteEnvironment();
+    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
+    Assert.assertEquals(Response.Status.OK.getStatusCode(),
+            jsonResponse.getCode());
 
-    GetMethod getMethod = httpGet(ENV_PATH + "/" + ENV_NAME);
-    Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(),
-        getMethod.getStatusCode());
-
+    Environment env =
+            gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
+    Assert.assertEquals(env.getEnvironmentSpec().getDockerImage(),
+            "continuumio/miniconda3");
+    Assert.assertEquals(1, env.getEnvironmentSpec().getKernelSpec().getDependencies().size());
   }
 
   @Test
   public void testListEnvironments() throws IOException {
+    LOG.info("Test list Environment using Environment REST API");
+    GetMethod getMethod = httpGet(ENV_PATH);
+    JsonResponse jsonResponse = getJsonResponse(getMethod, gson);
 
+    Environment[] getEnvironment =
+            gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment[].class);
+    Assert.assertEquals(ENV_NAME, getEnvironment[0].getEnvironmentSpec().getName());
+  }
+
+  @After
+  public void testDeleteEnvironment() throws Exception {
+    LOG.info("Test delete Environment using Environment REST API");
+
+    DeleteMethod deleteMethod = httpDelete(ENV_PATH + "/" + ENV_NAME);
+    JsonResponse jsonResponse = getJsonResponse(deleteMethod, gson);
+
+    Environment deletedEnv =
+            gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
+    Assert.assertEquals(ENV_NAME, deletedEnv.getEnvironmentSpec().getName());
+
+    GetMethod getMethod = httpGet(ENV_PATH + "/" + ENV_NAME);
+    Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(),
+        getMethod.getStatusCode());
   }
 }

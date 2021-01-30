@@ -103,20 +103,14 @@ public class NotebookRestApiIT extends AbstractSubmarineServerTest {
   public void testCreateNotebookWithJsonSpec() throws Exception {
     // create environment
     String envBody = loadContent("environment/test_env_3.json");
-    run(envBody, "application/json");
+    httpPost(ENV_PATH, envBody, "application/json");
 
     Gson gson = new GsonBuilder()
         .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
         .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
         .create();
     GetMethod getMethod = httpGet(ENV_PATH + "/" + ENV_NAME);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        getMethod.getStatusCode());
-
-    String json = getMethod.getResponseBodyAsString();
-    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        jsonResponse.getCode());
+    JsonResponse jsonResponse = getJsonResponse(getMethod, gson);
 
     Environment getEnvironment =
         gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
@@ -125,14 +119,14 @@ public class NotebookRestApiIT extends AbstractSubmarineServerTest {
     String body = loadContent("notebook/notebook-req.json");
     runTest(body, "application/json");
 
-    deleteEnvironment();
+    httpDelete(ENV_PATH + "/" + ENV_NAME);
   }
 
   @Test
   public void testCreateNotebookWithYamlSpec() throws Exception {
     // create environment
     String envBody = loadContent("environment/test_env_3.json");
-    run(envBody, "application/json");
+    httpPost(ENV_PATH, envBody, "application/json");
     Gson gson = new GsonBuilder()
         .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
         .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
@@ -153,7 +147,7 @@ public class NotebookRestApiIT extends AbstractSubmarineServerTest {
     String body = loadContent("notebook/notebook-req.yaml");
     runTest(body, "application/yaml");
 
-    deleteEnvironment();
+    httpDelete(ENV_PATH + "/" + ENV_NAME);
   }
 
   @Test
@@ -170,7 +164,7 @@ public class NotebookRestApiIT extends AbstractSubmarineServerTest {
   public void testListNotebooksWithUserId() throws Exception {
     // create environment
     String envBody = loadContent("environment/test_env_3.json");
-    run(envBody, "application/json");
+    httpPost(ENV_PATH, envBody, "application/json");
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
             .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
@@ -222,7 +216,7 @@ public class NotebookRestApiIT extends AbstractSubmarineServerTest {
     }
 
     // delete environment
-    deleteEnvironment();
+    httpDelete(ENV_PATH + "/" + ENV_NAME);
   }
 
   private void runTest(String body, String contentType) throws Exception {

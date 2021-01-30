@@ -30,8 +30,10 @@ import java.util.regex.Pattern;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.gson.Gson;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.DeleteMethod;
@@ -52,10 +54,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.submarine.commons.utils.SubmarineConfVars;
-import org.apache.submarine.server.api.environment.Environment;
-import org.apache.submarine.server.api.environment.EnvironmentId;
-import org.apache.submarine.server.gson.EnvironmentIdDeserializer;
-import org.apache.submarine.server.gson.EnvironmentIdSerializer;
 import org.apache.submarine.server.response.JsonResponse;
 import org.apache.submarine.server.rest.RestConstants;
 import org.apache.submarine.server.utils.TestUtils;
@@ -65,8 +63,6 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -83,7 +79,7 @@ public abstract class AbstractSubmarineServerTest {
   protected static File confDir;
 
   protected static String ENV_PATH =
-      "/api/" + RestConstants.V1 + "/" + RestConstants.ENVIRONMENT;
+          "/api/" + RestConstants.V1 + "/" + RestConstants.ENVIRONMENT;
   protected static String ENV_NAME = "my-submarine-env";
 
   public static String getWebsocketApiUrlToTest() {
@@ -96,7 +92,7 @@ public abstract class AbstractSubmarineServerTest {
   }
 
   public static String getUrlToTest() {
-    String url = "http://localhost:8080";
+    String url = "http://192.168.49.2:32080";
     if (System.getProperty("url") != null) {
       url = System.getProperty("url");
     }
@@ -148,11 +144,11 @@ public abstract class AbstractSubmarineServerTest {
       while (System.currentTimeMillis() - s < 1000 * 60 * 5) {  // 5 minutes
         Thread.sleep(2000);
         started = checkIfServerIsRunning();
-        if (started == true) {
+        if (started) {
           break;
         }
       }
-      if (started == false) {
+      if (!started) {
         throw new RuntimeException("Can not start Submarine server.");
       }
       LOG.info("Test Submarine server stared.");
@@ -185,11 +181,11 @@ public abstract class AbstractSubmarineServerTest {
       while (System.currentTimeMillis() - s < 1000 * 60 * 3) {
         Thread.sleep(2000);
         started = checkIfServerIsRunning();
-        if (started == false) {
+        if (!started) {
           break;
         }
       }
-      if (started == true) {
+      if (started) {
         throw new RuntimeException("Can not stop Submarine server");
       }
 
@@ -407,10 +403,7 @@ public abstract class AbstractSubmarineServerTest {
   }
 
   protected static boolean userAndPasswordAreNotBlank(String user, String pwd) {
-    if (StringUtils.isBlank(user) && StringUtils.isBlank(pwd)) {
-      return false;
-    }
-    return true;
+    return !StringUtils.isBlank(user) || !StringUtils.isBlank(pwd);
   }
 
   private static String getCookie(String user, String password) throws IOException {
@@ -438,87 +431,11 @@ public abstract class AbstractSubmarineServerTest {
     }
   }
 
-  protected void run(String body, String contentType) throws Exception {
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
-        .create();
-
-    // create
-    LOG.info("Create Environment using Environment REST API");
-
-    PostMethod postMethod = httpPost(ENV_PATH, body, contentType);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        postMethod.getStatusCode());
-
-    String json = postMethod.getResponseBodyAsString();
-    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        jsonResponse.getCode());
-
-    Environment env =
-        gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
-    verifyCreateEnvironmentApiResult(env);
-  }
-
-  protected void update(String body, String contentType) throws Exception {
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
-        .create();
-
-    // update
-    LOG.info("Update Environment using Environment REST API");
-
-    String json = httpPatch(ENV_PATH + "/" + ENV_NAME, body, contentType);
-
-    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        jsonResponse.getCode());
-
-    Environment env =
-        gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
-    verifyUpdateEnvironmentApiResult(env);
-  }
-
-  protected void verifyCreateEnvironmentApiResult(Environment env)
-      throws Exception {
-    Assert.assertNotNull(env.getEnvironmentSpec().getName());
-    Assert.assertNotNull(env.getEnvironmentSpec());
-  }
-
-  protected void verifyUpdateEnvironmentApiResult(Environment env)
-      throws Exception {
-    Assert.assertEquals(env.getEnvironmentSpec().getDockerImage(),
-        "continuumio/miniconda3");
-    Assert.assertTrue(
-        env.getEnvironmentSpec().getKernelSpec().getDependencies().size() == 1);
-  }
-
-
-  protected void deleteEnvironment() throws IOException {
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
-        .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
-        .create();
-    DeleteMethod deleteMethod = httpDelete(ENV_PATH + "/" + ENV_NAME);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        deleteMethod.getStatusCode());
-
-    String json = deleteMethod.getResponseBodyAsString();
-    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        jsonResponse.getCode());
-
-    Environment deletedEnv =
-        gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
-    Assert.assertEquals(ENV_NAME, deletedEnv.getEnvironmentSpec().getName());
-  }
-
   protected String loadContent(String resourceName) throws Exception {
     StringBuilder content = new StringBuilder();
     InputStream inputStream =
         this.getClass().getClassLoader().getResourceAsStream(resourceName);
+    assert inputStream != null;
     BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
     String l;
     while ((l = r.readLine()) != null) {
@@ -526,5 +443,16 @@ public abstract class AbstractSubmarineServerTest {
     }
     inputStream.close();
     return content.toString();
+  }
+
+  protected JsonResponse getJsonResponse(HttpMethodBase method, Gson gson) throws IOException {
+    Assert.assertEquals(Response.Status.OK.getStatusCode(),
+            method.getStatusCode());
+
+    String json = method.getResponseBodyAsString();
+    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
+    Assert.assertEquals(Response.Status.OK.getStatusCode(),
+            jsonResponse.getCode());
+    return jsonResponse;
   }
 }

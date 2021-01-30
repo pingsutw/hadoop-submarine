@@ -141,7 +141,7 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
         .create();
     // Create environment
     String envBody = loadContent("environment/test_env_1.json");
-    run(envBody, "application/json");
+    PostMethod postMethod = httpPost(ENV_PATH, envBody, "application/json");
 
     GetMethod getMethod = httpGet(ENV_PATH + "/" + ENV_NAME);
     Assert.assertEquals(Response.Status.OK.getStatusCode(),
@@ -161,8 +161,7 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
         loadContent("tensorflow/tf-mnist-with-env-patch-req.json");
     run(getEnvironment, body, patchBody, "application/json");
 
-    // Delete environment
-    deleteEnvironment();
+    httpDelete(ENV_PATH + "/" + ENV_NAME);
   }
 
   @Test
