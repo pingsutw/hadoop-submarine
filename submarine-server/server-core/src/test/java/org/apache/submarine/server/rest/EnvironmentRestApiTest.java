@@ -44,20 +44,19 @@ import static org.junit.Assert.assertEquals;
 
 public class EnvironmentRestApiTest {
   private static EnvironmentRestApi environmentStoreApi;
-  private static String kernelName = "team_default_python_3";
-  private static String dockerImage = "continuumio/anaconda3";
-  private static List<String> kernelChannels = Arrays.asList("defaults", "anaconda");
-  private static List<String> kernelDependencies = Arrays.asList(
+  private static final String kernelName = "team_default_python_3";
+  private static final List<String> kernelChannels = Arrays.asList("defaults", "anaconda");
+  private static final List<String> kernelDependencies = Arrays.asList(
       "_ipyw_jlab_nb_ext_conf=0.1.0=py37_0",
       "alabaster=0.7.12=py37_0",
       "anaconda=2020.02=py37_0",
       "anaconda-client=1.7.2=py37_0",
       "anaconda-navigator=1.9.12=py37_0");
 
-  private static GsonBuilder gsonBuilder = new GsonBuilder()
+  private static final GsonBuilder gsonBuilder = new GsonBuilder()
       .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
       .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer());
-  private static Gson gson = gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+  private static final Gson gson = gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
   @BeforeClass
   public static void init() {
@@ -81,6 +80,7 @@ public class EnvironmentRestApiTest {
     kernelSpec.setChannels(kernelChannels);
     kernelSpec.setDependencies(kernelDependencies);
     EnvironmentSpec environmentSpec = new EnvironmentSpec();
+    String dockerImage = "continuumio/anaconda3";
     environmentSpec.setDockerImage(dockerImage);
     environmentSpec.setKernelSpec(kernelSpec);
     environmentSpec.setName("foo");

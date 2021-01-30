@@ -49,7 +49,7 @@ public class EnvironmentManagerRestApiIT extends AbstractSubmarineServerTest {
           .create();
 
   @BeforeClass
-  public static void startUp() throws Exception {
+  public static void startUp() {
     Assert.assertTrue(checkIfServerIsRunning());
   }
 

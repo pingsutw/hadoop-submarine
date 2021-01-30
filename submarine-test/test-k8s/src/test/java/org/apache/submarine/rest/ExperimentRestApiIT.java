@@ -84,7 +84,7 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
       .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
       .create();
 
-  private static SubmarineConfiguration conf =
+  private static final SubmarineConfiguration conf =
       SubmarineConfiguration.getInstance();
 
   @BeforeClass
@@ -105,7 +105,7 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
 
   @Before
   public void setUp() throws Exception {
-    Thread.sleep(5000); // timeout for each case, ensuring k8s-client has enough time to delete resoures
+    Thread.sleep(5000); // timeout for each case, ensuring k8s-client has enough time to delete resources
   }
 
   @Test
@@ -141,16 +141,10 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
         .create();
     // Create environment
     String envBody = loadContent("environment/test_env_1.json");
-    PostMethod postMethod = httpPost(ENV_PATH, envBody, "application/json");
+    httpPost(ENV_PATH, envBody, "application/json");
 
     GetMethod getMethod = httpGet(ENV_PATH + "/" + ENV_NAME);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        getMethod.getStatusCode());
-
-    String json = getMethod.getResponseBodyAsString();
-    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(),
-        jsonResponse.getCode());
+    JsonResponse jsonResponse = getJsonResponse(getMethod, gson);
 
     Environment getEnvironment =
         gson.fromJson(gson.toJson(jsonResponse.getResult()), Environment.class);
@@ -193,25 +187,16 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
   }
 
   private void run(String body, String patchBody, String contentType) throws Exception {
-    // create
-    LOG.info("Create training job by Job REST API");
+    LOG.info("Create training experiment by experiment REST API");
     PostMethod postMethod = httpPost(BASE_API_PATH, body, contentType);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(), postMethod.getStatusCode());
-
-    String json = postMethod.getResponseBodyAsString();
-    JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(), jsonResponse.getCode());
+    JsonResponse jsonResponse = getJsonResponse(postMethod, gson);
 
     Experiment createdExperiment = gson.fromJson(gson.toJson(jsonResponse.getResult()), Experiment.class);
     verifyCreateJobApiResult(createdExperiment);
 
-    // find
+    LOG.info("Find training experiment by experiment REST API");
     GetMethod getMethod = httpGet(BASE_API_PATH + "/" + createdExperiment.getExperimentId().toString());
-    Assert.assertEquals(Response.Status.OK.getStatusCode(), getMethod.getStatusCode());
-
-    json = getMethod.getResponseBodyAsString();
-    jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(), jsonResponse.getCode());
+    jsonResponse = getJsonResponse(getMethod, gson);
 
     Experiment foundExperiment = gson.fromJson(gson.toJson(jsonResponse.getResult()), Experiment.class);
     verifyGetJobApiResult(createdExperiment, foundExperiment);
@@ -223,14 +208,10 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
     // TODO(jiwq): the commons-httpclient not support patch method
     // https://tools.ietf.org/html/rfc5789
 
-    // delete
+    LOG.info("Delete training experiment by experiment REST API");
     DeleteMethod deleteMethod = httpDelete(
         BASE_API_PATH + "/" + createdExperiment.getExperimentId().toString());
-    Assert.assertEquals(Response.Status.OK.getStatusCode(), deleteMethod.getStatusCode());
-
-    json = deleteMethod.getResponseBodyAsString();
-    jsonResponse = gson.fromJson(json, JsonResponse.class);
-    Assert.assertEquals(Response.Status.OK.getStatusCode(), jsonResponse.getCode());
+    jsonResponse = getJsonResponse(deleteMethod, gson);
 
     Experiment deletedExperiment = gson.fromJson(gson.toJson(jsonResponse.getResult()), Experiment.class);
     verifyDeleteJobApiResult(createdExperiment, deletedExperiment);
@@ -238,7 +219,6 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
 
   private void run(Environment expectedEnv, String body, String patchBody,
                    String contentType) throws Exception {
-    // create
     LOG.info("Create training job using Environment by Job REST API");
     PostMethod postMethod = httpPost(BASE_API_PATH, body, contentType);
     Assert.assertEquals(Response.Status.OK.getStatusCode(),
@@ -466,8 +446,8 @@ public class ExperimentRestApiIT extends AbstractSubmarineServerTest {
    * Direct used by K8s api. It storage the operator's base info.
    */
   private static class KfOperator {
-    private String version;
-    private String plural;
+    private final String version;
+    private final String plural;
 
     KfOperator(String version, String plural) {
       this.version = version;
