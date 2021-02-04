@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
@@ -54,12 +56,15 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.submarine.commons.utils.SubmarineConfVars;
+import org.apache.submarine.commons.utils.SubmarineConfiguration;
 import org.apache.submarine.server.response.JsonResponse;
+import org.apache.submarine.server.rest.EnvironmentRestApi;
 import org.apache.submarine.server.rest.RestConstants;
 import org.apache.submarine.server.utils.TestUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +86,16 @@ public abstract class AbstractSubmarineServerTest {
   protected static String ENV_PATH =
           "/api/" + RestConstants.V1 + "/" + RestConstants.ENVIRONMENT;
   protected static String ENV_NAME = "my-submarine-env";
+
+  protected static EnvironmentRestApi environmentStoreApi;
+  protected static final String kernelName = "team_default_python_3";
+  protected static final List<String> kernelChannels = Arrays.asList("defaults", "anaconda");
+  protected static final List<String> kernelDependencies = Arrays.asList(
+          "_ipyw_jlab_nb_ext_conf=0.1.0=py37_0",
+          "alabaster=0.7.12=py37_0",
+          "anaconda=2020.02=py37_0",
+          "anaconda-client=1.7.2=py37_0",
+          "anaconda-navigator=1.9.12=py37_0");
 
   public static String getWebsocketApiUrlToTest() {
     String websocketUrl = "ws://localhost:8080" + WEBSOCKET_API_URL;

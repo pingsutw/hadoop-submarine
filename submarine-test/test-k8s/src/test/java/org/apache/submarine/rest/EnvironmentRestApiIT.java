@@ -32,17 +32,13 @@ import org.apache.submarine.server.api.environment.EnvironmentId;
 import org.apache.submarine.server.gson.EnvironmentIdDeserializer;
 import org.apache.submarine.server.gson.EnvironmentIdSerializer;
 import org.apache.submarine.server.response.JsonResponse;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.After;
+import org.junit.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @SuppressWarnings("rawtypes")
-public class EnvironmentManagerRestApiIT extends AbstractSubmarineServerTest {
+public class EnvironmentRestApiIT extends AbstractSubmarineServerTest {
   private final Gson gson = new GsonBuilder()
           .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdSerializer())
           .registerTypeAdapter(EnvironmentId.class, new EnvironmentIdDeserializer())
