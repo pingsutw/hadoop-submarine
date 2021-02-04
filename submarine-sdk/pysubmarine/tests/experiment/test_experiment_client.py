@@ -29,7 +29,7 @@ def test_experiment_e2e():
     environment = EnvironmentSpec(
         image='apache/submarine:tf-dist-mnist-test-1.0')
     experiment_meta = ExperimentMeta(
-        name='mnist-dist',
+        name='mnist-dist-test',
         namespace='default',
         framework='Tensorflow',
         cmd='python /var/tf_dist_mnist/dist_mnist.py --train_steps=100',
