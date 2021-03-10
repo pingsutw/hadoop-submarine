@@ -3,7 +3,6 @@ name: Deploy submarine docker images
 on: [push, pull_request]
 jobs:
   deploy-images:
-    if: github.repository == 'apache/submarine'
     runs-on: ubuntu-latest
     timeout-minutes: 240
     strategy:
